@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SPAViews {
+    <div id="_history" class="parent-size shared">
+        <div>
+            <span style="font-size:18px; padding-left:30px">History</span>
+            <a class="pull-right delete-history">Delete all play history</a>
+        </div>
+
+        <div class="row history_container">
+
+        </div>
+    </div>
+}
+@section Scripts{
+
+    <script>
+        $.BindingAnnotation("#_history",
+            function () { return GrandMonsieur.History.HistoryView; },
+            function () { return GrandMonsieur.History.HistoryViewModel; });
+    </script>
+
+}

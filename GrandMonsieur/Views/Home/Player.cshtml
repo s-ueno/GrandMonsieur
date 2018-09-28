@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutDialog.cshtml";
+}
+
+
+@section SPAViews {
+    <div id="_player" class="parent-size shared">
+        <iframe class="player_frame" src="http://www.youtube.com/embed/loFtozxZG0s"></iframe>
+    </div>
+}
+@section Scripts{
+
+    <script>
+        $.BindingAnnotation("#_player",
+            function () { return GrandMonsieur.Home.PlayerView; },
+            function () { return GrandMonsieur.Home.PlayerViewModel; });
+    </script>
+
+}

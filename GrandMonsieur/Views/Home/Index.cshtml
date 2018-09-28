@@ -1,0 +1,42 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SPAViews {
+    <div id="_home" class="parent-size shared">
+        <div class="input-group">
+            <img class="vertical-center" src="~/Content/images/yt_icon_rgb.png" style="height:24px;width:24px" />
+            <span style="font-size:18px; padding-left:30px">YouTube</span>
+        </div>
+        <div class="row youtube_container">
+        </div>
+
+
+        <div class="input-group">
+            <img class="vertical-center" src="~/Content/images/dailymotion.png" style="height:24px;width:24px" />
+            <span style="font-size:18px; padding-left:30px">Dailymotion</span>
+        </div>
+        <div class="row dailymotion_container">
+        </div>
+
+
+        <div class="input-group">
+            <img class="vertical-center" src="~/Content/images/niconico.png" style="height:24px;width:24px" />
+            <span style="font-size:18px; padding-left:30px">niconico</span>
+        </div>
+        <div class="row niconico_container">
+        </div>
+
+
+
+    </div>
+}
+@section Scripts{
+
+    <script>
+        $.BindingAnnotation("#_home",
+            function () { return GrandMonsieur.Home.HomeView; },
+            function () { return GrandMonsieur.Home.HomeViewModel; });
+    </script>
+
+}

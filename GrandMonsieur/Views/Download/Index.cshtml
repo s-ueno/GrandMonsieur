@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SPAViews {
+    <div id="_download" class="parent-size shared">
+        <div>
+            <span style="font-size:18px; padding-left:30px">Download List</span>
+            <a class="pull-right delete-history">Delete all Download history</a>
+        </div>        
+        <div class="row history_container">
+
+        </div>
+    </div>
+}
+@section Scripts{
+
+    <script>
+        $.BindingAnnotation("#_download",
+            function () { return GrandMonsieur.Download.DownloadView; },
+            function () { return GrandMonsieur.Download.DownloadViewModel; });
+    </script>
+
+}
