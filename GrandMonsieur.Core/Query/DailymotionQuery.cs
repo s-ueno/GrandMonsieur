@@ -19,7 +19,7 @@ namespace GrandMonsieur.Core
         {
             var list = new List<string>();
             list.Add("fields=duration_formatted,id,owner.screenname,thumbnail_url,title,url,embed_url,views_total");
-            list.Add(string.Format("search={0}", HttpUtility.UrlEncode(string.IsNullOrWhiteSpace(base.Filter) ? "sleeping music" : base.Filter)));
+            list.Add(string.Format("search={0}", HttpUtility.UrlEncode(string.IsNullOrWhiteSpace(base.Filter) ? "news" : base.Filter)));
             string arg = string.Empty;
             switch (base.Order)
             {

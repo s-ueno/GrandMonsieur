@@ -28,6 +28,7 @@ namespace GrandMonsieur.Core
         public YoutubeQuery()
         {
             this.VideoType = VideoType.Youtube;
+            this.Order = OrderMode.Relevance;
         }
 
         public override string Generate()

@@ -9,7 +9,7 @@
 
   "scope": "/",
   "display": "standalone",
-  "start_url": "http://grandmonsieur.azurewebsites.net/",
+  "start_url": "https://grandmonsieur.azurewebsites.net/",
 
   "theme_color": "transparent",
 
@@ -19,7 +19,7 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "http://grandmonsieur.azurewebsites.net/favicon.ico",
+      "src": "https://grandmonsieur.azurewebsites.net/favicon.ico",
       "sizes": "16x16 32x32 48x48 64x64"
     }
   ]

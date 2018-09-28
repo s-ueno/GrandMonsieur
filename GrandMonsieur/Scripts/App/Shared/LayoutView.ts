@@ -7,8 +7,8 @@
             $("#allow_youtube").bootstrapSwitch({
                 size: "mini",
                 labelText: 'YouTube',
-                labelWidth : "100px",
-                
+                labelWidth: "100px",
+
             });
             $("#allow_dailymotion").bootstrapSwitch({
                 size: "mini",
@@ -23,16 +23,10 @@
 
             builder.Element(".site_title")
                 .BindingAction(UIElement.Click, x => x.Refresh());
-            builder.Element(".homemenu")
-                .BindingAction(UIElement.Click, x => x.Home());
-            builder.Element(".historymenu")
-                .BindingAction(UIElement.Click, x => x.History());
-            builder.Element(".downloadmenu")
-                .BindingAction(UIElement.Click, x => x.Download());
-
             builder.Element(".search-input")
                 .Binding(UIElement.ValueProperty, x => x.SearchString)
-                .BindingAction(UIElement.Enter, x => x.Search());
+                .BindingAction(UIElement.Enter, x => x.Search())
+                .BuildSuggest(DomBehind.SuggestSource.Google, 300);
 
             builder.Element(".search-input-button")
                 .BindingAction(UIElement.Click, x => x.Search());

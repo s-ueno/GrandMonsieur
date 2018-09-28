@@ -39,11 +39,14 @@ namespace GrandMonsieur
 
             "~/Scripts/collections.js",
             "~/Scripts/bootstrap-switch.js",
-            "~/Scripts/dombehind.js",
-            "~/Scripts/domBehind.plugin.jqueryui.js",
         };
 
         public static readonly string[] AppJs = new string[] {
+
+            "~/Scripts/dombehind.js",
+            "~/Scripts/domBehind.plugin.jqueryui.js",
+
+
             "~/Scripts/App/App.js",
             "~/Scripts/App/Startup.js",
             "~/Scripts/App/SupportSites.js",

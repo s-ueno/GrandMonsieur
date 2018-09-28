@@ -12,7 +12,7 @@ namespace GrandMonsieur.Core
         public NiconicoQuery()
         {
             VideoType = VideoType.Niconico;
-            Order = OrderMode.ViewCount;
+            Order = OrderMode.Rating;
             Service = Target.video;
         }
         public static readonly string SearchUri = Utils.AppSettings<string>("SearchUri.niconico", "https://api.search.nicovideo.jp/api/v2/{0}/contents/search?");
@@ -28,8 +28,10 @@ namespace GrandMonsieur.Core
         public override string Generate()
         {
             var list = new List<string>();
-            list.Add("targets=title,description,tags&fields=contentId,title,viewCounter,startTime,lengthSeconds,thumbnailUrl");
-            list.Add(string.Format("q={0}", HttpUtility.UrlEncode(string.IsNullOrWhiteSpace(base.Filter) ? "" : base.Filter)));
+            // list.Add("targets=title,description,tags&fields=contentId,title,viewCounter,startTime,lengthSeconds,thumbnailUrl");
+            list.Add("targets=title,tags&fields=contentId,title,viewCounter,startTime,lengthSeconds,thumbnailUrl");
+            list.Add(string.Format("q={0}", HttpUtility.UrlEncode(string.IsNullOrWhiteSpace(base.Filter) ? "news" : base.Filter)));
+
             string arg = "viewCounter";
             switch (Order)
             {
@@ -72,7 +74,9 @@ namespace GrandMonsieur.Core
                 uri = string.Format(uri, "video");
             }
 
-            return uri + string.Join("&", list);
+            uri += string.Join("&", list);
+
+            return uri;
         }
 
         public override Response Parse(dynamic json)

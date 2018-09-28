@@ -7,6 +7,7 @@
 
         Initialize(): void {
             // ポータルから検索イベントをサブスクライブ
+            AppMediator.SearchEvent.Clear();
             AppMediator.SearchEvent.AddHandler((sender, e) => this.Search(e.search, e.site));
 
             let history = this.GetTable(SearchHistory);
@@ -50,6 +51,8 @@
                 this.UpdateTarget();
             });
 
+
+
             let niconico = new InitializeWebProxy();
             let d3 = niconico.ExecuteAjax({
                 VideoType: 2
@@ -60,6 +63,12 @@
             }).always(() => {
                 this.UpdateTarget();
             });
+
+            // 会社でやったら、プロキシでひっかかった（汗
+            //let d = $.Deferred();
+            //d.resolve();
+            //let d3 = d.promise();
+            
 
 
             $.when(d1, d2, d3).always(() => {

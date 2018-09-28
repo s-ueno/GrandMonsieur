@@ -72,7 +72,8 @@ namespace GrandMonsieur.Controllers
             var result = new InitializeResponse();
             var query = QueryFactory.Queries().FirstOrDefault(x => x.VideoType == type);
             query.MaxResults = 15;
-            query.Order = OrderMode.Date;
+            // hack
+            //query.Order = OrderMode.Date;
 
             var helper = new QueryHelper();
             result.Response = helper.FindQuery(query);
@@ -97,7 +98,8 @@ namespace GrandMonsieur.Controllers
             var response = new SearchResponse();
             var query = QueryFactory.Queries().FirstOrDefault(x => x.VideoType == (VideoType)request.VideoType);
             query.MaxResults = 15;
-            query.Order = OrderMode.Date;
+            // hack
+            //query.Order = OrderMode.Date;
             query.Filter = request.Filter;
 
             var helper = new QueryHelper();

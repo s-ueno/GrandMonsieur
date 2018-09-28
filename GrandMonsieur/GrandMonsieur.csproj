@@ -62,7 +62,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
@@ -231,9 +231,8 @@
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="App_Readme\NProgressjs_README.md" />
     <Content Include="App_Readme\NProgressjs_LICENSE" />
-    <None Include="Properties\PublishProfiles\GrandMonsieur - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\GrandMonsieur - Web Deploy1.pubxml" />
     <None Include="manifest.json" />
+    <None Include="Properties\PublishProfiles\GrandMonsieur - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\dombehind.js" />
     <Content Include="Scripts\domBehind.plugin.jqueryui.js" />

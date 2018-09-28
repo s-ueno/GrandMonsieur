@@ -20,15 +20,6 @@
         public Refresh() {
             this.Navigator.Reload(true);
         }
-        public Home() {
-            this.Navigator.Move("home");
-        }
-        public History() {
-            this.Navigator.Move("history");
-        }
-        public Download() {
-            this.Navigator.Move("download");
-        }
 
         public SearchString: string;
         public Search() {
@@ -36,9 +27,9 @@
 
             if (String.IsNullOrWhiteSpace(this.SearchString)) return;
 
-            if (location.href !== $.AbsoluteUri("home")) {
-                this.Home();
-            }
+            //if (location.href !== $.AbsoluteUri("home")) {
+            //    this.Home();
+            //}
 
             let history = this.GetTable(SearchHistory);
             let pms = history.FindRowAsync(x => x.Filter, this.SearchString);
@@ -60,7 +51,7 @@
             }).always(() => {
                 AppMediator.SearchEvent.Raise(this, {
                     search: this.SearchString,
-                    site: SupportSites.Youtube | SupportSites.Dailymotion
+                    site: SupportSites.Youtube | SupportSites.Dailymotion | SupportSites.NicoNico
                 });
             });
         }
