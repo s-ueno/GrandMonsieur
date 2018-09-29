@@ -17,6 +17,10 @@
             });
         }
 
+        public Home() {
+            this.Navigator.Move("home");
+        }
+
         public Refresh() {
             this.Navigator.Reload(true);
         }
@@ -27,9 +31,9 @@
 
             if (String.IsNullOrWhiteSpace(this.SearchString)) return;
 
-            //if (location.href !== $.AbsoluteUri("home")) {
-            //    this.Home();
-            //}
+            if (location.href !== $.AbsoluteUri("home")) {
+                this.Home();
+            }
 
             let history = this.GetTable(SearchHistory);
             let pms = history.FindRowAsync(x => x.Filter, this.SearchString);
