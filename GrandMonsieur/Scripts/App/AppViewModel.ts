@@ -7,6 +7,23 @@
             return new DomBehind.IndexedDBHelper(ctor, "Monsieur");
         }
 
+        public AddDownloadList(e: MovieInfo) {
+            let table = this.GetTable(DownloadInfo);
+            table.FindRowAsync(x => x.Uri, e.Uri).done(x => {
+                if (x && x.DownloadedDate) {
+                    toastr.info(`${e.Title} はダウンロード済みです。リストから確認してください。`);
+                } else {
+                    table.UpsertAsync(new DownloadInfo(e), x => x.Uri).always(() => {
+                        toastr.info(`${e.Title} をダウンロードリストに追加しました。`);
+                    });
+                }
+            }).fail(() => {
+                table.UpsertAsync(new DownloadInfo(e), x => x.Uri).always(() => {
+                    toastr.info(`${e.Title} をダウンロードリストに追加しました。`);
+                });
+            });
+        }
+
         public DownloadRaw(e: MovieInfo) {
             let table = this.GetTable(DownloadInfo);
             table.UpsertAsync(new DownloadInfo(e), x => x.Uri).always(() => {

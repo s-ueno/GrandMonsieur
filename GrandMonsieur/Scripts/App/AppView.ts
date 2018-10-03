@@ -14,6 +14,25 @@
             let app = DomBehind.Application.Current;
             return app.Navigator;
         }
+
+        protected DateDiff(x) {
+            if (!x) return null;
+
+            let date = new Date(x);
+            let now = new Date(Date.now());
+
+            let diff = now.getTime() - date.getTime();
+            let daysDiff = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            if (daysDiff === 0) {
+                return "Today";
+            }
+            return `${daysDiff} days ago`;
+        }
+        protected Views(x) {
+            return `${numeral(x).format("0,0")} views`;
+        }
+        
     }
 
 }

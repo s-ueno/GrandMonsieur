@@ -109,7 +109,7 @@ namespace GrandMonsieur.Core
                         detail.Duration = string.Join(":", array.Select(x => x.PadLeft(2, '0')));
 
                         var statistics = detailItem.statistics;
-                        detail.ViewCount = $"{statistics.viewCount} views";
+                        detail.ViewCount = $"{statistics.viewCount}";
 
                         list.Add(detail);
 

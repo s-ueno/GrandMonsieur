@@ -4,22 +4,27 @@
 
         constructor() {
             super();
-            $("#allow_youtube").bootstrapSwitch({
+            this.EnsureSwitch("#allow_youtube", "YouTube");
+            this.EnsureSwitch("#allow_dailymotion", "dailymotion");
+            this.EnsureSwitch("#allow_niconico", "niconico");
+        }
+        private EnsureSwitch(selector: string, title: string) {
+            let sw = $(selector).bootstrapSwitch({
                 size: "mini",
-                labelText: 'YouTube',
+                labelText: title,
                 labelWidth: "100px",
-
+                state: $.GetLocalStorage(title, true),
             });
-            $("#allow_dailymotion").bootstrapSwitch({
-                size: "mini",
-                labelText: 'dailymotion',
-                labelWidth: "100px",
+            sw.on("switchChange.bootstrapSwitch", (e : any) => {
+                let checked = e.target.checked;
+                $.SetLocalStorage(title, checked);
+
+                AppMediator.TargetSiteChanged.Raise(this, { site: title, checked: checked });
             });
         }
 
         BuildBinding(): void {
             let builder = this.CreateBindingBuilder<LayoutViewModel>();
-
 
             builder.Element(".site_title")
                 .BindingAction(UIElement.Click, x => x.Refresh());
@@ -80,8 +85,6 @@
 
 
 
-            builder.Element(".usename")
-                .Binding(UIElement.TextProperty, x => x.UserName);
 
         }
 

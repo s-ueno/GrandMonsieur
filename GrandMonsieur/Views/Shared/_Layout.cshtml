@@ -7,6 +7,7 @@
     <title>@ViewBag.Title</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <link rel="manifest" href="~/manifest.json">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-54883059-2"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -52,14 +53,20 @@
                                                 <input id="allow_dailymotion" class="switch" type="checkbox" checked />
                                             </div>
                                         </li>
+                                        <li>
+                                            <div class="p-1">
+                                                <input id="allow_niconico" class="switch" type="checkbox" checked />
+                                            </div>
+                                        </li>
                                     </ul>
                                 </li>
-                            </ul>
+                            </ul>                            
                         </div>
                     </div>
                     <!-- /sidebar menu -->
                     <!-- /menu footer buttons -->
                     <div class="sidebar-footer hidden-small">
+                        <img src="~/Content/images/grandmonsieur.png" class="qrcode" />
                         <label class="">© 2018 Grand Monsieur</label>
                     </div>
                     <!-- /menu footer buttons -->
@@ -95,6 +102,13 @@
             <!-- /page content -->
         </div>
     </div>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-54883059-2');
+    </script>
     <script>
         $.SetRootUri("@ViewBag.RootUri");
 

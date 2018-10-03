@@ -161,11 +161,14 @@
     <Content Include="Content\custom.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\Home\Home.css" />
     <Content Include="Content\images\dailymotion.png" />
+    <Content Include="Content\images\grandmonsieur.png" />
     <Content Include="Content\images\niconico.png" />
     <Content Include="Content\images\preloader.gif" />
     <Content Include="Content\images\yt_icon_rgb.png" />
     <Content Include="Content\nprogress.css" />
+    <Content Include="Content\Shared\Shared.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -208,6 +211,8 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\toastr.css" />
+    <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -231,6 +236,8 @@
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="App_Readme\NProgressjs_README.md" />
     <Content Include="App_Readme\NProgressjs_LICENSE" />
+    <Content Include="Content\toastr.scss" />
+    <Content Include="Content\toastr.less" />
     <None Include="manifest.json" />
     <None Include="Properties\PublishProfiles\GrandMonsieur - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
@@ -246,6 +253,78 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\nprogress.js" />
     <Content Include="Scripts\nprogress.min.js" />
+    <Content Include="Scripts\numeral\locales.js" />
+    <Content Include="Scripts\numeral\locales.min.js" />
+    <Content Include="Scripts\numeral\locales\be-nl.js" />
+    <Content Include="Scripts\numeral\locales\be-nl.min.js" />
+    <Content Include="Scripts\numeral\locales\bg.js" />
+    <Content Include="Scripts\numeral\locales\bg.min.js" />
+    <Content Include="Scripts\numeral\locales\chs.js" />
+    <Content Include="Scripts\numeral\locales\chs.min.js" />
+    <Content Include="Scripts\numeral\locales\cs.js" />
+    <Content Include="Scripts\numeral\locales\cs.min.js" />
+    <Content Include="Scripts\numeral\locales\da-dk.js" />
+    <Content Include="Scripts\numeral\locales\da-dk.min.js" />
+    <Content Include="Scripts\numeral\locales\de-ch.js" />
+    <Content Include="Scripts\numeral\locales\de-ch.min.js" />
+    <Content Include="Scripts\numeral\locales\de.js" />
+    <Content Include="Scripts\numeral\locales\de.min.js" />
+    <Content Include="Scripts\numeral\locales\en-au.js" />
+    <Content Include="Scripts\numeral\locales\en-au.min.js" />
+    <Content Include="Scripts\numeral\locales\en-gb.js" />
+    <Content Include="Scripts\numeral\locales\en-gb.min.js" />
+    <Content Include="Scripts\numeral\locales\en-za.js" />
+    <Content Include="Scripts\numeral\locales\en-za.min.js" />
+    <Content Include="Scripts\numeral\locales\es-es.js" />
+    <Content Include="Scripts\numeral\locales\es-es.min.js" />
+    <Content Include="Scripts\numeral\locales\es.js" />
+    <Content Include="Scripts\numeral\locales\es.min.js" />
+    <Content Include="Scripts\numeral\locales\et.js" />
+    <Content Include="Scripts\numeral\locales\et.min.js" />
+    <Content Include="Scripts\numeral\locales\fi.js" />
+    <Content Include="Scripts\numeral\locales\fi.min.js" />
+    <Content Include="Scripts\numeral\locales\fr-ca.js" />
+    <Content Include="Scripts\numeral\locales\fr-ca.min.js" />
+    <Content Include="Scripts\numeral\locales\fr-ch.js" />
+    <Content Include="Scripts\numeral\locales\fr-ch.min.js" />
+    <Content Include="Scripts\numeral\locales\fr.js" />
+    <Content Include="Scripts\numeral\locales\fr.min.js" />
+    <Content Include="Scripts\numeral\locales\hu.js" />
+    <Content Include="Scripts\numeral\locales\hu.min.js" />
+    <Content Include="Scripts\numeral\locales\it.js" />
+    <Content Include="Scripts\numeral\locales\it.min.js" />
+    <Content Include="Scripts\numeral\locales\ja.js" />
+    <Content Include="Scripts\numeral\locales\ja.min.js" />
+    <Content Include="Scripts\numeral\locales\lv.js" />
+    <Content Include="Scripts\numeral\locales\lv.min.js" />
+    <Content Include="Scripts\numeral\locales\nl-nl.js" />
+    <Content Include="Scripts\numeral\locales\nl-nl.min.js" />
+    <Content Include="Scripts\numeral\locales\no.js" />
+    <Content Include="Scripts\numeral\locales\no.min.js" />
+    <Content Include="Scripts\numeral\locales\pl.js" />
+    <Content Include="Scripts\numeral\locales\pl.min.js" />
+    <Content Include="Scripts\numeral\locales\pt-br.js" />
+    <Content Include="Scripts\numeral\locales\pt-br.min.js" />
+    <Content Include="Scripts\numeral\locales\pt-pt.js" />
+    <Content Include="Scripts\numeral\locales\pt-pt.min.js" />
+    <Content Include="Scripts\numeral\locales\ru-ua.js" />
+    <Content Include="Scripts\numeral\locales\ru-ua.min.js" />
+    <Content Include="Scripts\numeral\locales\ru.js" />
+    <Content Include="Scripts\numeral\locales\ru.min.js" />
+    <Content Include="Scripts\numeral\locales\sk.js" />
+    <Content Include="Scripts\numeral\locales\sk.min.js" />
+    <Content Include="Scripts\numeral\locales\sl.js" />
+    <Content Include="Scripts\numeral\locales\sl.min.js" />
+    <Content Include="Scripts\numeral\locales\th.js" />
+    <Content Include="Scripts\numeral\locales\th.min.js" />
+    <Content Include="Scripts\numeral\locales\tr.js" />
+    <Content Include="Scripts\numeral\locales\tr.min.js" />
+    <Content Include="Scripts\numeral\locales\uk-ua.js" />
+    <Content Include="Scripts\numeral\locales\uk-ua.min.js" />
+    <Content Include="Scripts\numeral\numeral.js" />
+    <Content Include="Scripts\numeral\numeral.min.js" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="sw.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -310,6 +389,8 @@
     <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\nprogress\NProgress.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\numeral\index.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\toastr\toastr.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -335,7 +416,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>59466</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

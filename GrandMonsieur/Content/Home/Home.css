@@ -1,0 +1,30 @@
+﻿#_home {
+}
+
+    #_home .filter {
+        margin: 5px;
+    }
+
+    #_home .more {
+        margin: 15px;
+    }
+
+    #_home .moreButton {
+        font-size: larger;
+    }
+
+    #_home .sort {
+    }
+
+        #_home .sort .ui-selectmenu-text {
+            margin-right: 15px;
+            width: 110px;
+        }
+
+    #_home .result {
+        margin-right: 20px;
+    }
+
+        #_home .result .ui-selectmenu-text {
+            width: 70px;
+        }

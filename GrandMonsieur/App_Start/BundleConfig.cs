@@ -26,8 +26,11 @@ namespace GrandMonsieur
              "~/Content/font-awesome.css",
              "~/Content/bootstrap-switch/bootstrap3/bootstrap-switch.css",
              "~/Content/nprogress.css",
+             "~/Content/toastr.css",
              "~/Content/custom.css",
              "~/Content/Site.css",
+             "~/Content/Home/Home.css",
+             "~/Content/Shared/Shared.css",
         };
 
         public static readonly string[] NugetJs = new string[] {
@@ -36,6 +39,10 @@ namespace GrandMonsieur
             "~/Scripts/jquery.validate*",
             "~/Scripts/jquery-ui*",
             "~/Scripts/nprogress.js",
+            "~/Scripts/toastr.js",
+
+            "~/Scripts/numeral/numeral.js",
+            "~/Scripts/numeral/locales/ja.js",
 
             "~/Scripts/collections.js",
             "~/Scripts/bootstrap-switch.js",
@@ -52,8 +59,8 @@ namespace GrandMonsieur
             "~/Scripts/App/SupportSites.js",
             "~/Scripts/App/AppMediator.js",
 
-            "~/Scripts/App/Widget/Movie.js",
-            "~/Scripts/App/Widget/MovieHistory.js",
+            //"~/Scripts/App/Widget/Movie.js",
+            //"~/Scripts/App/Widget/MovieHistory.js",
 
             "~/Scripts/App/AppViewModel.js",
             "~/Scripts/App/AppView.js",

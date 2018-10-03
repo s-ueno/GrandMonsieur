@@ -20,7 +20,7 @@ namespace GrandMonsieur.Core
             var list = new List<string>();
             list.Add("fields=duration_formatted,id,owner.screenname,thumbnail_url,title,url,embed_url,views_total");
             list.Add(string.Format("search={0}", HttpUtility.UrlEncode(string.IsNullOrWhiteSpace(base.Filter) ? "news" : base.Filter)));
-            string arg = string.Empty;
+            string arg = "relevance";
             switch (base.Order)
             {
                 case OrderMode.Date:
@@ -36,7 +36,6 @@ namespace GrandMonsieur.Core
                     arg = "visited";
                     break;
             }
-            arg = "relevance";
             list.Add(string.Format("sort={0}", arg));
             if (base.OldFilter == base.Filter)
             {
@@ -65,7 +64,7 @@ namespace GrandMonsieur.Core
             var items = json.list;
             if (items != null)
             {
-                foreach(var each in items)
+                foreach (var each in items)
                 {
                     var detail = new ResponseDetail();
                     detail.Duration = each.duration_formatted;
@@ -75,7 +74,7 @@ namespace GrandMonsieur.Core
                     detail.CreateUser = each["owner.screenname"];
                     detail.ThumbnailUri = each.thumbnail_url;
                     detail.Title = each.title;
-                    detail.ViewCount = $"{each.views_total} views"; ;
+                    detail.ViewCount = $"{each.views_total}";
                     list.Add(detail);
                 }
             }

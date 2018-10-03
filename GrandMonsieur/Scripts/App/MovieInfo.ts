@@ -25,10 +25,11 @@
                 this.Source = src.Source;
                 this.UpdateDate = src.UpdateDate;
                 this.LastPlayDate = src.LastPlayDate;
-                this.LastDownloadDate = new Date();
+                this.AddDownloadListDate = new Date();
             }
         }
-        public LastDownloadDate?: Date;
+        public AddDownloadListDate?: Date;
+        public DownloadedDate?: Date;
 
     }
 

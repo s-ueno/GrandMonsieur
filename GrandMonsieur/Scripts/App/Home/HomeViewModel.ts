@@ -1,6 +1,30 @@
 ﻿namespace GrandMonsieur.Home {
     export class HomeViewModel extends AppViewModel {
 
+        public get AllowSearchYoutube(): boolean {
+            return $.GetLocalStorage("YouTube", true);
+        }
+        public get AllowSearchDaily(): boolean {
+            return $.GetLocalStorage("dailymotion", true);
+        }
+        public get AllowSearchNiconico(): boolean {
+            return $.GetLocalStorage("niconico", true);
+        }
+
+        public get Sort(): string {
+            return $.GetLocalStorage("Sort", "Relevance");
+        }
+        public set Sort(value: string) {
+            $.SetLocalStorage("Sort", value);
+        }
+
+        public get Result(): number {
+            return $.GetLocalStorage("Result", 15);
+        }
+        public set Result(value: number) {
+            $.SetLocalStorage("Result", value);
+        }
+
         public YoutubeList: DomBehind.Data.ListCollectionView;
         public DailymotionList: DomBehind.Data.ListCollectionView;
         public NiconicoList: DomBehind.Data.ListCollectionView;
@@ -8,73 +32,29 @@
         Initialize(): void {
             // ポータルから検索イベントをサブスクライブ
             AppMediator.SearchEvent.Clear();
-            AppMediator.SearchEvent.AddHandler((sender, e) => this.Search(e.search, e.site));
+            AppMediator.SearchEvent.AddHandler((sender, e) => this.SearchRaw(e.search, e.site));
 
+            AppMediator.TargetSiteChanged.Clear();
+            AppMediator.TargetSiteChanged.AddHandler((sender, e) => this.UpdateTarget());
+
+            (<HomeView>this.View).Sort(this, this.Sort);
+        }
+
+        public Search() {
             let history = this.GetTable(SearchHistory);
             history.List().done(x => {
-
                 if (x instanceof Array) {
                     let last = x.OrderByDecording(x => x.UpdateDate).FirstOrDefault();
                     if (last) {
                         this.SearchAll(last.Filter);
-                    } else {
-                        this.InitializeRaw();
+                    }
+                    else {
+                        this.SearchAll(null);
                     }
                 }
             }).fail(() => {
-                this.InitializeRaw();
+                this.SearchAll(null);
             });
-        }
-        protected InitializeRaw() {
-            NProgress.start();
-
-            let youtube = new InitializeWebProxy();
-            let d1 = youtube.ExecuteAjax({
-                VideoType: 0
-            }).done(x => {
-                this.YoutubeList = this.CreateListCollectionView(x.Response);
-            }).fail(error => {
-                this.ShowError(error);
-            }).always(() => {
-                this.UpdateTarget();
-            });
-
-
-            let daily = new InitializeWebProxy();
-            let d2 = daily.ExecuteAjax({
-                VideoType: 1
-            }).done(x => {
-                this.DailymotionList = this.CreateListCollectionView(x.Response);
-            }).fail(error => {
-                this.ShowError(error);
-            }).always(() => {
-                this.UpdateTarget();
-            });
-
-
-
-            let niconico = new InitializeWebProxy();
-            let d3 = niconico.ExecuteAjax({
-                VideoType: 2
-            }).done(x => {
-                this.NiconicoList = this.CreateListCollectionView(x.Response);
-            }).fail(error => {
-                this.ShowError(error);
-            }).always(() => {
-                this.UpdateTarget();
-            });
-
-            // 会社でやったら、プロキシでひっかかった（汗
-            //let d = $.Deferred();
-            //d.resolve();
-            //let d3 = d.promise();
-            
-
-
-            $.when(d1, d2, d3).always(() => {
-                NProgress.done();
-            });
-
         }
 
         protected CreateListCollectionView(response) {
@@ -106,68 +86,58 @@
 
         protected SearchAll(search: string) {
             // hack
-            this.Search(search, SupportSites.Youtube | SupportSites.Dailymotion | SupportSites.NicoNico);
+            this.SearchRaw(search, SupportSites.Youtube | SupportSites.Dailymotion | SupportSites.NicoNico);
         }
-        protected Search(search: string, site: SupportSites) {
+        protected SearchRaw(search: string, site: SupportSites) {
             NProgress.start();
-
-            let d1 = $.Deferred();
-            if (site & SupportSites.Youtube) {
-                let svc = new SearchWebProxy();
-                svc.ExecuteAjax({ VideoType: 0, Filter: search }).done(x => {
-                    this.YoutubeList = this.CreateListCollectionView(x.Response);
-                }).fail(x => {
-                    // this.ShowError(x);
-                    console.error(x);
-                }).always(() => {
-                    d1.resolve();
+            return $.when(
+                this.ExecuteAjax(site & SupportSites.Youtube, search).done(x => {
+                    this.YoutubeList = this.CreateListCollectionView(x.Response)
                     this.UpdateTarget();
-                });
-            } else {
-                d1.resolve();
-            }
-
-            let d2 = $.Deferred();
-            if (site & SupportSites.Dailymotion) {
-                let svc = new SearchWebProxy();
-                svc.ExecuteAjax({ VideoType: 1, Filter: search }).done(x => {
+                }),
+                this.ExecuteAjax(site & SupportSites.Dailymotion, search).done(x => {
                     this.DailymotionList = this.CreateListCollectionView(x.Response);
-                }).fail(x => {
-                    // this.ShowError(x);
-                    console.error(x);
-                }).always(() => {
-                    d2.resolve();
                     this.UpdateTarget();
-                });
-            } else {
-                d2.resolve();
-            }
-
-
-            let d3 = $.Deferred();
-            if (site & SupportSites.NicoNico) {
-                let svc = new SearchWebProxy();
-                svc.ExecuteAjax({ VideoType: 2, Filter: search }).done(x => {
+                }),
+                this.ExecuteAjax(site & SupportSites.NicoNico, search).done(x => {
                     this.NiconicoList = this.CreateListCollectionView(x.Response);
-                }).fail(x => {
-                    // this.ShowError(x);
-                    console.error(x);
-                }).always(() => {
-                    d3.resolve();
                     this.UpdateTarget();
-                });
-            } else {
-                d3.resolve();
+                })
+            ).always(() => NProgress.done());
+        }
+        private ExecuteAjax(site: SupportSites, query: string): JQueryPromise<any> {
+            let type = -1;
+            if (site === SupportSites.Youtube)
+                type = 0;
+            if (site === SupportSites.Dailymotion)
+                type = 1;
+            if (site === SupportSites.NicoNico)
+                type = 2;
+
+            if (site === -1) {
+                let d = $.Deferred();
+                d.resolve();
+                return d.promise();
             }
 
-            return $.when(d1.promise(), d2.promise(), d3.promise()).always(() => {
-                NProgress.done();
+            let svc = new SearchWebProxy();
+            return svc.ExecuteAjax({
+                VideoType: type,
+                Filter: query,
+                SortList: this.Sort,
+                SearchCount: this.Result,
             });
+        }
+
+        public More() {
+
+
+
         }
 
 
         public Download(e: MovieInfo) {
-            this.DownloadRaw(e);
+            this.AddDownloadList(e);
         }
 
         public Play(e: MovieInfo) {

@@ -31,10 +31,6 @@
 
             if (String.IsNullOrWhiteSpace(this.SearchString)) return;
 
-            if (location.href !== $.AbsoluteUri("home")) {
-                this.Home();
-            }
-
             let history = this.GetTable(SearchHistory);
             let pms = history.FindRowAsync(x => x.Filter, this.SearchString);
             pms.done(x => {
@@ -55,10 +51,11 @@
             }).always(() => {
                 AppMediator.SearchEvent.Raise(this, {
                     search: this.SearchString,
-                    site: SupportSites.Youtube | SupportSites.Dailymotion | SupportSites.NicoNico
+                    site: SupportSites.Youtube | SupportSites.NicoNico | SupportSites.Dailymotion
                 });
             });
         }
+
 
     }
 }

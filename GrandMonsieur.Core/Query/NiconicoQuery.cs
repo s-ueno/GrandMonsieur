@@ -103,7 +103,7 @@ namespace GrandMonsieur.Core
                     // detail.CreateUser = each["owner.screenname"];
                     detail.ThumbnailUri = each.thumbnailUrl;
                     detail.Title = each.title;
-                    detail.ViewCount = $"{each.viewCounter} views"; ;
+                    detail.ViewCount = $"{each.viewCounter}";
                     list.Add(detail);
                 }
             }

@@ -1,36 +1,27 @@
 ﻿namespace GrandMonsieur.Download {
     import UIElement = DomBehind.UIElement;
-    export class DownloadView extends DomBehind.BizView {
-
-        constructor() {
-            super();
-
-
-        }
+    export class DownloadView extends AppView {
 
         BuildBinding(): void {
             let builder = this.CreateBindingBuilder<DownloadViewModel>();
 
-            let context =
+            let rowContext = 
                 builder.Element(".history_container")
-                    .BindingMovieHistory<MovieInfo>(x => x.History, {
-                        download: (x, e) => x.Download(e),
-                        play: (x, e) => x.Play(e),
-                        downloadprogress: true,
+                    .BuildTemplateItems<MovieInfo>(x => x.History, {
+                        template: "#downloadTemplate",
                     });
-
-            context
-                .BindingThumbnail(x => x.Thumbnail)
-                .BindingDuration(x => x.Duration)
-                .BindingTitle(x => x.Title)
-                .BindingOwner(x => x.Owner)
-                .BindingViews(x => x.Views)
-                .BindingUpdateDate(x => x.UpdateDate);
-
+            rowContext
+                .BindingProperty(UIElement.SrcProperty, ".movie_thumbnail", x => x.Thumbnail)
+                .BindingProperty(UIElement.TextProperty, ".movie_duration", x => x.Duration)
+                .BindingProperty(UIElement.TextProperty, ".movie_title", x => x.Title)
+                .BindingProperty(UIElement.TextProperty, ".movie_owner", x => x.Owner)
+                .BindingProperty(UIElement.TextProperty, ".movie_views", x => x.Views, { convertTarget: x => this.Views(x) })
+                .BindingProperty(UIElement.TextProperty, ".movie_publish", x => x.UpdateDate, { convertTarget: x => this.DateDiff(x) })
+                .BindingColumnAction(".movie_play", (x, args) => x.Play(args))
+                .BindingColumnAction(".movie_download", (x, args) => x.Download(args));
 
             builder.Element(".delete-history")
                 .BindingAction(UIElement.Click, x => x.ClearHistory());
         }
-
     }
 }

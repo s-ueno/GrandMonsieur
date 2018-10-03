@@ -4,30 +4,101 @@
 
 @section SPAViews {
     <div id="_home" class="parent-size shared">
-        <div class="input-group">
-            <img class="vertical-center" src="~/Content/images/yt_icon_rgb.png" style="height:24px;width:24px" />
-            <span style="font-size:18px; padding-left:30px">YouTube</span>
+
+
+        <div style="margin:20px 0">
+            <a class="filter"><h5 class="fa fa-filter"> フィルタ</h5></a>
         </div>
-        <div class="row youtube_container">
+        <div class="row">
+            <div class="filterContainer hide">
+                <div class="col-sm-3">
+                    <div>
+                        <label>並べ替え</label>
+                    </div>
+                    <div class="sortContainer">
+                        <a class="Relevance"><p>関連度順</p></a>
+                        <a class="Date"><p>アップロード順</p></a>
+                        <a class="ViewCount"><p>視聴回数</p></a>
+                        <a class="Rating"><p>評価</p></a>
+                        <a class="Title"><p>タイトルと一致を優先</p></a>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div>
+                        <label>検索件数</label>
+                    </div>
+                    <div class="resultContainer">
+                        <a class="Result10"><p>10 件</p></a>
+                        <a class="Result15"><p>15 件</p></a>
+                        <a class="Result30"><p>30 件</p></a>
+                        <a class="Result50"><p>50 件</p></a>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
-        <div class="input-group">
-            <img class="vertical-center" src="~/Content/images/dailymotion.png" style="height:24px;width:24px" />
-            <span style="font-size:18px; padding-left:30px">Dailymotion</span>
-        </div>
-        <div class="row dailymotion_container">
-        </div>
+        <div class="youtube">
+            <div class="input-group">
+                <img class="vertical-center" src="~/Content/images/yt_icon_rgb.png" style="height:24px;width:24px" />
+                <span style="font-size:18px; padding-left:30px">YouTube</span>
+            </div>
+            <div class="row youtube_container"></div>
 
-
-        <div class="input-group">
-            <img class="vertical-center" src="~/Content/images/niconico.png" style="height:24px;width:24px" />
-            <span style="font-size:18px; padding-left:30px">niconico</span>
-        </div>
-        <div class="row niconico_container">
         </div>
 
 
+        <div class="dailymotion">
+            <div class="input-group">
+                <img class="vertical-center" src="~/Content/images/dailymotion.png" style="height:24px;width:24px" />
+                <span style="font-size:18px; padding-left:30px">Dailymotion</span>
+            </div>
+            <div class="row dailymotion_container"></div>
+
+        </div>
+
+
+
+        <div class="niconico">
+            <div class="input-group">
+                <img class="vertical-center" src="~/Content/images/niconico.png" style="height:24px;width:24px" />
+                <span style="font-size:18px; padding-left:30px">niconico</span>
+            </div>
+            <div class="row niconico_container"></div>
+        </div>
+
+
+        <div class="row">
+            <div class="pull-right more">
+                <a class="moreButton"><span class="fa fa-arrow-right"></span> search more</a>
+            </div>
+        </div>
+
+        <template id="movieTemplate">
+            <div class="col-md-55" style="max-width:220px">
+                <div class="thumbnail" style="height:220px">
+                    <div class="image view view-first">
+                        <img class="movie_thumbnail" style="width: 100%; display: block;" src="" />
+                        <div class="mask parent-size">
+                            <div class="tools">
+                                <a class="movie_play"><i class="fa fa-play"></i> play</a>
+                                <a class="movie_download"><i class="fa fa-download"></i> download</a>
+                            </div>
+                        </div>
+                        <label class="movie_duration mask" style="opacity:1; width:auto; display:flex; background-color:black; color:white; padding:0 2px"></label>
+                    </div>
+                    <div>
+                        <label class="movie_title" style="font-size: 12px;"></label>
+                    </div>
+                    <div class="vertical-align-bottom" style="width: 100%; padding-bottom: 20px; padding-left:12px; padding-right:12px">
+                        <span class="pull-left movie_owner" style="font-size: 12px;"></span>
+                        <br />
+                        <span class="pull-right movie_views" style="font-size: 12px;"></span>
+                        <span class="pull-left  movie_publish" style="font-size: 12px;"></span>
+                    </div>
+                </div>
+            </div>
+        </template>
 
     </div>
 }

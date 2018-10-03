@@ -7,10 +7,46 @@
         <div>
             <span style="font-size:18px; padding-left:30px">Download List</span>
             <a class="pull-right delete-history">Delete all Download history</a>
-        </div>        
+        </div>
         <div class="row history_container">
 
         </div>
+
+
+        <template id="downloadTemplate">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="thumbnail" style="min-width:240px; min-height:135px">
+                        <div class="image view view-first" style="height:100%; width:100%">
+                            <img class="movie_thumbnail" style="width: 100%; display: block; height:100%" src="" />
+                            <div class="mask parent-size">
+                                <div class="tools">
+                                    <a class="movie_play"><i class="fa fa-play"></i> play </a>
+                                    <a class="movie_download"><i class="fa fa-download"></i> download </a>
+                                </div>
+                            </div>
+                            <label class="movie_duration mask" style="opacity:1; width:auto; display:flex; background-color:black; color:white; padding:0 2px;">4:30</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="">
+                        <h4 class="movie_title"></h4>
+                    </div>
+                    <div class="">
+                        <label class="movie_owner"></label>
+                    </div>
+                    <div class="">
+                        <span class="pull-right movie_views"></span>
+                        <span class="pull-left  movie_publish"></span>
+                    </div>
+                    <div class="" style="padding-top:15px">
+                        <div class="progress progress_sm movie_progress" style="width: 100%;display:none"></div>
+                    </div>
+                </div>
+                <iframe class="movie_frame" src="" style="display:none"></iframe>
+            </div>
+        </template>
     </div>
 }
 @section Scripts{
