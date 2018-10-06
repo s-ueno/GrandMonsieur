@@ -169,7 +169,7 @@ var DomBehind;
             if (this.Source === SuggestSource.Google) {
                 this.CustomSource = function (request, response) {
                     $.ajax({
-                        url: "http://www.google.com/complete/search",
+                        url: "https://www.google.com/complete/search",
                         data: { hl: 'ja', client: 'firefox', q: request.term },
                         dataType: "jsonp",
                         type: "GET",
@@ -182,7 +182,7 @@ var DomBehind;
             else if (this.Source === SuggestSource.Amazon) {
                 this.CustomSource = function (request, response) {
                     $.ajax({
-                        url: "http://completion.amazon.co.jp/search/complete",
+                        url: "https://completion.amazon.co.jp/search/complete",
                         data: { mkt: '6', method: 'completion', 'search-alias': 'aps', q: request.term },
                         dataType: "jsonp",
                         type: "GET",

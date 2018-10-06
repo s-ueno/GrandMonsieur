@@ -32,6 +32,10 @@ declare namespace DomBehind {
 }
 
 declare namespace DomBehind {
+    /**
+     * It is the code behind the view
+     * to promotes component-oriented developers
+     */
     abstract class BizView implements IDisposable {
         Container: JQuery;
         private _container;
@@ -43,9 +47,23 @@ declare namespace DomBehind {
         Ensure(): void;
         protected UnSubscribe(): void;
         protected Subscribe(): void;
+        /**
+         * start the build of the binding
+         */
         protected CreateBindingBuilder<T extends BizViewModel>(): BindingBehaviorBuilder<T>;
+        /**
+         * provides the ability to easily use behaviors
+         */
         BindingBehaviors: Data.BindingBehaviorCollection;
+        /**
+         * Forces a data transfer from the binding source property to the binding target property.
+         * @param mark
+         */
         UpdateTarget(mark?: string): void;
+        /**
+         * Sends the current binding target value to the binding source property
+         * @param mark
+         */
         UpdateSource(mark?: string): void;
         Validate(mark?: string): boolean;
         ClearValidator(mark?: string): void;
@@ -55,6 +73,10 @@ declare namespace DomBehind {
 }
 
 declare namespace DomBehind {
+    /**
+     * ViewModel
+     * to promotes component-oriented developers
+     */
     abstract class BizViewModel extends NotifiableImp implements Data.IExceptionHandling {
         constructor();
         protected NotifyEvent<TEvent>(event: TypedEvent<TEvent>, args: TEvent): void;
@@ -64,9 +86,23 @@ declare namespace DomBehind {
         private _view;
         protected OnViewChanged(): void;
         Initialized: boolean;
+        /**
+         * must inherits Initialize method.
+         */
         abstract Initialize(): void;
-        ViewLoaded(): void;
+        /**
+         * inherit if necessary View Activate method.
+         */
+        Activate(): void;
+        /**
+         * Forces a data transfer from the binding source property to the binding target property.
+         * @param mark
+         */
         UpdateTarget(mark?: string): void;
+        /**
+         * Sends the current binding target value to the binding source property
+         * @param mark
+         */
         UpdateSource(mark?: string): void;
         Validate(mark?: string): boolean;
         protected WaitingOverlay(func: Function, image?: string): void;
@@ -142,15 +178,6 @@ declare namespace DomBehind {
 }
 
 
-
-declare namespace DomBehind {
-    class Camera extends Data.DataBindingBehavior {
-    }
-    interface BindingBehaviorBuilder<T> {
-        BuildCamera(): any;
-        BuildVideo(): any;
-    }
-}
 
 declare namespace DomBehind {
     interface IFileInfo {
@@ -229,29 +256,101 @@ declare namespace DomBehind {
     interface BindingBehaviorBuilder<T> {
         InputType(inputType: InputType): BindingBehaviorBuilder<T>;
     }
+    /**
+     * HTML5
+     */
     enum InputType {
+        /**
+         * hidden
+         */
         Hidden = 0,
+        /**
+         * text
+         */
         Text = 1,
+        /**
+         * search
+         */
         Search = 2,
+        /**
+         * tel
+         */
         Tel = 3,
+        /**
+         * url
+         */
         Url = 4,
+        /**
+         * email
+         */
         Email = 5,
+        /**
+         * password
+         */
         Password = 6,
+        /**
+         * datetime
+         */
         DateTime = 7,
+        /**
+         * date
+         */
         Date = 8,
+        /**
+         * month
+         */
         Month = 9,
+        /**
+         * week
+         */
         Week = 10,
+        /**
+         * time
+         */
         Time = 11,
+        /**
+         * datetime-local
+         */
         DateTimeLocal = 12,
+        /**
+         * number
+         */
         Number = 13,
+        /**
+         * range
+         */
         Range = 14,
+        /**
+         * color
+         */
         Color = 15,
+        /**
+         * checkbox
+         */
         Checkbox = 16,
+        /**
+         * radio
+         */
         Radio = 17,
+        /**
+         * file
+         */
         File = 18,
+        /**
+         * submit
+         */
         Submit = 19,
+        /**
+         * image
+         */
         Image = 20,
+        /**
+         * reset
+         */
         Reset = 21,
+        /**
+         * button
+         */
         Button = 22
     }
 }
@@ -290,6 +389,11 @@ declare namespace DomBehind {
         ColumnBinding(title: string, binding: (row: TRow) => any, option?: ITableHeaderBodyOption): TableBindingBehaviorBuilder<TRow>;
     }
     interface BindingBehaviorBuilder<T> {
+        /**
+         * Divタグにテーブルタグを生成します
+         * 実装例：
+         *
+         */
         BuildListView<TRow>(itemSource: (x: T) => any, option?: ITableOption): TableBindingBehaviorBuilder<TRow>;
     }
 }
@@ -368,6 +472,7 @@ declare namespace DomBehind.Controls {
         protected static InstanceMark: string;
         static Register(behavior: Data.DataBindingBehavior): void;
         constructor(Behavior: Data.DataBindingBehavior);
+        /** Hold the handle in order to safely remove the Event */
         protected UpdateTargetEventHandle: (sender: any, e: any) => void;
         protected UpdateSourceEventHandle: (sender: any, e: any) => void;
         protected PropertyChangedEventHandle: (sender: any, e: any) => void;
@@ -472,6 +577,10 @@ declare namespace DomBehind {
         Columns: Array<ITemplateListViewColumn>;
         LastOption: ITemplateListViewColumn;
         RowStyleExpression: (row: any) => string;
+        AlternateStyle: {
+            Selector: string;
+            Css: string;
+        };
         ItemsSource: Data.ListCollectionView;
         private FindTemplate;
         RemoveAll(): void;
@@ -487,6 +596,7 @@ declare namespace DomBehind {
         BindingProperty(dp: Data.DependencyProperty, selector: string, exp: (x: TRow) => any, option?: ITemplateListViewColumn): TemplateListViewBindingBehaviorBuilder<TOwner, TRow>;
         BindingEvent(ev: IEventBuilder, selector: string, exp: (x: TOwner, args: TRow) => void, option?: ITemplateListViewColumn): TemplateListViewBindingBehaviorBuilder<TOwner, TRow>;
         BindingRowStyle(exp: (x: TRow) => string): TemplateListViewBindingBehaviorBuilder<TOwner, TRow>;
+        BindingAlternateRowStyle(selector: string, css: string): TemplateListViewBindingBehaviorBuilder<any, any>;
     }
     interface BindingBehaviorBuilder<T> {
         BuildTemplateItems<TRow>(itemsSource: (x: T) => any, option: ITemplateListViewOption<T>): TemplateListViewBindingBehaviorBuilder<T, TRow>;
@@ -495,11 +605,15 @@ declare namespace DomBehind {
 
 declare namespace DomBehind {
     class UIElement {
+        /**
+         * Gets or sets the val attribute of the element
+         */
         static ValueProperty: Data.DependencyProperty;
         static TextProperty: Data.DependencyProperty;
         static SrcProperty: Data.DependencyProperty;
         static IsEnabledProperty: Data.DependencyProperty;
         static IsVisibleProperty: Data.DependencyProperty;
+        static OpacityProperty: Data.DependencyProperty;
         static PlaceHolderProperty: Data.DependencyProperty;
         static IsCheckedProperty: Data.DependencyProperty;
         static MaxLengthProperty: Data.DependencyProperty;
@@ -511,16 +625,25 @@ declare namespace DomBehind {
         static Keydown: IEventBuilder;
         static LostFocus: IEventBuilder;
         static Initialize: IEventBuilder;
-        static ViewLoaded: IEventBuilder;
+        static Activate: IEventBuilder;
         static ModalClosing: IEventBuilder;
     }
 }
 
 declare namespace DomBehind.Data {
+    /**
+     * linked the method of the View of the event and the ViewModel
+     */
     class ActionBindingBehavior extends BindingBehavior {
         Event: IEvent;
+        /**
+         * Hold the handle in order to safely remove the Event
+         */
         protected EventHandle: (sender: any, e: any) => void;
         Action: Function;
+        /**
+         * Hold the handle in order to safely remove the Action
+         */
         protected ActionHandle: (e: any) => void;
         ActionParameterCount: number;
         AllowBubbling: boolean;
@@ -530,6 +653,11 @@ declare namespace DomBehind.Data {
         protected readonly ActionInvoker: ActionPolicy;
         private _actionInvoker;
         CreateActionInvoker(policies: ActionPolicy[]): ActionPolicy;
+        /**
+         * Run the linked action
+         * @param sender
+         * @param e
+         */
         protected Do(sender: any, e: any): void;
         Dispose(): void;
     }
@@ -544,11 +672,17 @@ declare namespace DomBehind.Data {
 }
 
 declare namespace DomBehind.Data {
+    /**
+     * supports the link of the view and the view model
+     */
     abstract class BindingBehavior implements IDisposable {
         DataContext: any;
         Element: JQuery;
         BindingPolicy: BindingPolicy;
         Priolity: number;
+        /**
+         * ensure a bind
+         */
         abstract Ensure(): void;
         Dispose(): void;
         protected _disposed: boolean;
@@ -556,31 +690,81 @@ declare namespace DomBehind.Data {
 }
 
 declare namespace DomBehind {
+    /**
+     * support the construction of behavior
+     */
     class BindingBehaviorBuilder<T> {
         constructor(owner: BizView);
         Owner: BizView;
+        /**
+         * define the target element
+         * @param selector
+         */
         Element(selector: string): BindingBehaviorBuilder<T>;
         Element(uiElement: JQuery): BindingBehaviorBuilder<T>;
         CurrentElement: JQuery;
         CurrentSelector: string;
         CurrentBehavior: Data.BindingBehavior;
         SetValue(dp: Data.DependencyProperty, value: any): BindingBehaviorBuilder<T>;
+        /**
+         * linking the properties of the view and the view model
+         * @param property
+         * @param getter
+         * @param setter
+         * @param updateTrigger is update timing of view model
+         */
         Binding<P>(property: Data.DependencyProperty, bindingExpression: (x: T) => P, mode?: Data.BindingMode, updateTrigger?: Data.UpdateSourceTrigger): Data.DataBindingBehaviorBuilder<T>;
+        /**
+         * Assign "IValueConverter"
+         * @param conv
+         */
         SetConverter(conv: IValueConverter): BindingBehaviorBuilder<T>;
         ConvertTarget(exp: (x: any) => any): BindingBehaviorBuilder<T>;
         ConvertSource(exp: (x: any) => any): BindingBehaviorBuilder<T>;
         BindingViewViewModel(view: (x: T) => BizView, viewModel: (x: T) => BizViewModel): BindingBehaviorBuilder<T>;
+        /**
+         * linking the action of the view and the view model
+         * @param event
+         * @param action
+         */
         BindingAction(event: IEventBuilder, action: (x: T) => any): BindingBehaviorBuilder<T>;
+        /**
+         * linking the action of the view and the view model
+         * @param event
+         * @param action
+         */
         BindingAction(event: IEventBuilder, action: (x: T, args: any) => void): BindingBehaviorBuilder<T>;
+        /**
+         * Register the behavior
+         * @param behavior
+         */
         Add<TBehavior extends Data.BindingBehavior>(behavior: TBehavior): TBehavior;
     }
 }
 
 declare namespace DomBehind.Data {
+    /**
+     * provides the ability to easily use behaviors
+     */
     class BindingBehaviorCollection extends collections.LinkedList<Data.BindingBehavior> implements IDisposable {
+        /**
+         * Ensure
+         */
         Ensure(): void;
+        /**
+         * lists the more behaviors
+         * @param mark
+         */
         ListDataBindingBehavior(mark?: string): Data.DataBindingBehavior[];
+        /**
+         * Forces a data transfer from the binding source property to the binding target property.
+         * @param mark
+         */
         UpdateTarget(mark?: string): void;
+        /**
+         * Sends the current binding target value to the binding source property
+         * @param mark
+         */
         UpdateSource(mark?: string): void;
         Dispose(): void;
         protected _disposed: boolean;
@@ -588,6 +772,9 @@ declare namespace DomBehind.Data {
 }
 
 declare namespace DomBehind.Data {
+    /**
+     * policy on binding
+     */
     class BindingPolicy {
         Trigger: UpdateSourceTrigger;
         Mode: BindingMode;
@@ -597,16 +784,28 @@ declare namespace DomBehind.Data {
 }
 
 declare namespace DomBehind.Data {
+    /**
+     * linking the properties of the view and the ViewModel
+     */
     class DataBindingBehavior extends BindingBehavior {
         Property: Data.DependencyProperty;
         PInfo: PropertyInfo;
         private _pinfo;
         Marks: string[];
         AdditionalInfo: collections.LinkedDictionary<string, any>;
+        /**
+         *  ValueCore is the input value of the view that is not transferred to the ViewModel
+         */
         readonly ValueCore: any;
         UpdateSourceEvent: IEvent;
+        /**
+         * Sends the current binding target value to the binding source property
+         */
         UpdateSource(): void;
         UpdateTargetEvent: IEvent;
+        /**
+         * Forces a data transfer from the binding source property to the binding target property.
+         */
         UpdateTarget(): void;
         Ensure(): void;
         protected Events: string[];
@@ -619,27 +818,55 @@ declare namespace DomBehind.Data {
     class DataBindingBehaviorBuilder<T> extends BindingBehaviorBuilder<T> {
         constructor(owner: BizView);
         protected readonly Behavior: Data.DataBindingBehavior;
+        /**
+         * Give any of the mark to the property.
+         * It is possible to perform partial updating and partial validation.
+         * @param region
+         */
         PartialMark(...mark: string[]): DataBindingBehaviorBuilder<T>;
+        /**
+         *
+         * @param converter
+         */
         Converter(converter: IValueConverter): DataBindingBehaviorBuilder<T>;
         AddValidator<T extends Validation.Validator>(validator: T): T;
     }
 }
 
 declare namespace DomBehind.Data {
+    /**
+     * To communicate the View and ViewModel properties using JQuery
+     */
     class DependencyProperty {
         constructor(name: string);
         readonly PropertyName: string;
         private _propertyName;
+        /**
+         * Using JQuery to get the value from the View
+         */
         readonly GetValue: (jQuery: JQuery) => any;
         private _getter;
+        /**
+         * Using JQuery and set the value to View
+         */
         readonly SetValue: (jQuery: JQuery, value: any, caller?: any) => void;
         private _setter;
+        /**
+         * Default UpdateSourceTrigger
+         */
         readonly UpdateSourceTrigger: UpdateSourceTrigger;
         private _updateSourceTrigger;
         readonly BindingMode: BindingMode;
         private _bindingMode;
         readonly Ensure: (behavior: DataBindingBehavior) => void;
         private _ensure;
+        /**
+         * It defines the communication using JQuery
+         * @param propertyName
+         * @param getValue
+         * @param setValue
+         * @param updateSourceTrigger
+         */
         static RegisterAttached(propertyName: string, getValue: (jQuery: JQuery) => any, setValue: (jQuery: JQuery, value: any, caller?: any) => void, defaultUpdateSourceTrigger?: UpdateSourceTrigger, mode?: BindingMode, ensure?: (behavior: DataBindingBehavior) => void): DependencyProperty;
     }
 }
@@ -656,12 +883,22 @@ declare namespace DomBehind.Data {
 }
 
 declare namespace DomBehind.Data {
+    /**
+     * Apply any of the policy to the bindable action
+     */
     abstract class ActionPolicy {
+        /**
+         * Return the execution priority
+         */
         abstract Priority(): number;
         abstract Begin(): void;
         abstract Done(): void;
         abstract Fail(ex: ActionPolicyExceptionEventArgs): void;
         abstract Always(): void;
+        /**
+         *
+         * @param func
+         */
         Do(func: Function): any;
         NextPolicy: ActionPolicy;
         Behavior: ActionBindingBehavior;
@@ -725,6 +962,13 @@ declare namespace DomBehind.Data {
 }
 
 declare namespace DomBehind.Data {
+    /******************************************************************************
+    LoadingOverlay - A flexible loading overlay jQuery plugin
+        Author          : Gaspare Sganga
+        Version         : 1.5.1
+        License         : MIT
+        Documentation   : http://gasparesganga.com/labs/jquery-loading-overlay/
+    *******************************************************************************/
     interface IWaitingOverlayOption {
         Color: string;
         Custom: string;
@@ -818,6 +1062,9 @@ interface ObjectConstructor {
 }
 
 interface String {
+    /**
+     * 拡張メソッドを宣言する際にprototype汚染を防止します
+     */
     ExtendedPrototype(key: any, value: any): void;
 }
 
@@ -839,7 +1086,6 @@ interface String {
     PadLeft(totalWidth: number, paddingChar: string): string;
     PadRight(totalWidth: number, paddingChar: string): string;
     SubString(start: number, length: number): string;
-    UriToBinary(): number[];
 }
 
 
@@ -963,16 +1209,32 @@ declare namespace DomBehind {
         Raise(sender: any, data: any): void;
         Ensure(behavior: any): any;
     }
+    /**
+     * define typed events
+     */
     class TypedEvent<T> implements IEvent {
         EventName: string;
         private _eventName;
         private handlers;
+        /**
+         * Handle the defined event
+         * @param handler
+         */
         AddHandler(handler: {
             (sender: any, data: T): void;
         }): void;
+        /**
+         * Remove the handle from the defined event
+         * @param handler
+         */
         RemoveHandler(handler: {
             (sender: any, data: T): void;
         }): void;
+        /**
+         * Notify all of the handle
+         * @param sender
+         * @param data
+         */
         Raise(sender: any, data: T): void;
         Clear(): void;
         EnsureHandler: (behavior: any) => void;
@@ -984,11 +1246,22 @@ declare namespace DomBehind {
         Create(): IEvent;
         EventName: string;
     }
+    /**
+     * Generate a typed event class.
+     */
     class EventBuilder<T> implements IEventBuilder {
         constructor(eventName: string);
         Create(): IEvent;
+        /**
+         * It gets the event name.
+         * Event name will be used in JQuery
+         */
         readonly EventName: string;
         private _eventName;
+        /**
+         * Generate a typed event class.
+         * @param eventName
+         */
         static RegisterAttached<T>(eventName?: string, ensure?: (behavior: any) => void): IEventBuilder;
         private ensureHandler;
     }
@@ -1162,9 +1435,21 @@ declare namespace DomBehind {
 }
 
 declare namespace DomBehind.Data {
+    /**
+     * Describes the timing of binding source updates.
+     */
     enum UpdateSourceTrigger {
+        /**
+         * Updates the binding source only when you call the UpdateSource method.
+         */
         Explicit = 0,
+        /**
+         * Updates the binding source whenever the binding target element loses focus.
+         */
         LostForcus = 1,
+        /**
+         * This is for extension
+         */
         PropertyChanged = 2
     }
 }
@@ -1268,7 +1553,6 @@ declare namespace DomBehind.Validation {
         protected _disposed: boolean;
     }
 }
-
 
 
 

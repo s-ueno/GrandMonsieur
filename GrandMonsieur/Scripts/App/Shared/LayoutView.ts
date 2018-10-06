@@ -82,10 +82,6 @@
                         $('ul:first', li).slideDown();
                     }
                 });
-
-
-
-
         }
 
         /**
@@ -142,6 +138,8 @@
 
                 newDom.attr("id", newDom.attr("data-menu-cache-id"));
                 newDom.show();
+                // notify activate
+                newDom.trigger(UIElement.Activate.EventName);  
 
                 setTimeout(() => {
                     this.UpdateMenu();

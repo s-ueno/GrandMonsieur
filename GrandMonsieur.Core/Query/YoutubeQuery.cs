@@ -38,7 +38,7 @@ namespace GrandMonsieur.Core
             list.Add(string.Format("maxResults={0}", base.MaxResults));
             list.Add(string.Format("order={0}", base.Order.ToString().ToLower()));
             list.Add(string.Format("type={0}", this.YoutubeVideoType.ToQueryString()));
-            if (base.OldFilter == base.Filter && !string.IsNullOrWhiteSpace(Convert.ToString(this.PageToken)))
+            if (/* base.OldFilter == base.Filter &&*/  !string.IsNullOrWhiteSpace(Convert.ToString(this.PageToken)))
             {
                 list.Add(string.Format("pageToken={0}", this.PageToken));
             }

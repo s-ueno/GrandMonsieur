@@ -47,8 +47,7 @@ namespace GrandMonsieur.Core
             }
             list.Add(string.Format("_sort={0}", arg));
 
-
-            if (OldFilter == Filter)
+            if (PageToken != null)
             {
                 int num = 1;
                 int.TryParse(System.Convert.ToString(this.PageToken), out num);

@@ -8,6 +8,9 @@
 
             builder.Element(".filter")
                 .BindingAction(UIElement.Click, x => this.ToggleFilter());
+            builder.Element(".more")
+                .BindingAction(UIElement.Click, x => x.More());
+
 
             builder.Element(".Relevance")
                 .BindingAction(UIElement.Click, x => this.Sort(x, "Relevance"));
@@ -36,15 +39,7 @@
                     .BuildTemplateItems<MovieInfo>(x => x.YoutubeList, {
                         template: "#movieTemplate",
                     });
-            youtubeBinding
-                .BindingProperty(UIElement.SrcProperty, ".movie_thumbnail", x => x.Thumbnail)
-                .BindingProperty(UIElement.TextProperty, ".movie_duration", x => x.Duration)
-                .BindingProperty(UIElement.TextProperty, ".movie_title", x => x.Title)
-                .BindingProperty(UIElement.TextProperty, ".movie_owner", x => x.Owner)
-                .BindingProperty(UIElement.TextProperty, ".movie_views", x => x.Views, { convertTarget: x => this.Views(x) })
-                .BindingProperty(UIElement.TextProperty, ".movie_publish", x => x.UpdateDate, { convertTarget: x => this.DateDiff(x) })
-                .BindingColumnAction(".movie_play", (x, args) => x.Play(args))
-                .BindingColumnAction(".movie_download", (x, args) => x.Download(args));
+            this.BindingMovie(youtubeBinding);
             builder.Element(".youtube")
                 .Binding(UIElement.IsVisibleProperty, x => x.AllowSearchYoutube);
 
@@ -55,15 +50,7 @@
                     .BuildTemplateItems<MovieInfo>(x => x.DailymotionList, {
                         template: "#movieTemplate",
                     });
-            dailyBinding
-                .BindingProperty(UIElement.SrcProperty, ".movie_thumbnail", x => x.Thumbnail)
-                .BindingProperty(UIElement.TextProperty, ".movie_duration", x => x.Duration)
-                .BindingProperty(UIElement.TextProperty, ".movie_title", x => x.Title)
-                .BindingProperty(UIElement.TextProperty, ".movie_owner", x => x.Owner)
-                .BindingProperty(UIElement.TextProperty, ".movie_views", x => x.Views)
-                .BindingProperty(UIElement.TextProperty, ".movie_publish", x => x.UpdateDate, { convertTarget: x => this.DateDiff(x) })
-                .BindingColumnAction(".movie_play", (x, args) => x.Play(args))
-                .BindingColumnAction(".movie_download", (x, args) => x.Download(args));
+            this.BindingMovie(dailyBinding);
             builder.Element(".dailymotion")
                 .Binding(UIElement.IsVisibleProperty, x => x.AllowSearchDaily);
 
@@ -74,54 +61,65 @@
                     .BuildTemplateItems<MovieInfo>(x => x.NiconicoList, {
                         template: "#movieTemplate",
                     });
-            niconicoBinding
+            this.BindingMovie(niconicoBinding);
+            builder.Element(".niconico")
+                .Binding(UIElement.IsVisibleProperty, x => x.AllowSearchNiconico);
+
+
+            builder.Element(".top")
+                .BindingAction(UIElement.Click, x => {
+                    $('html,body').animate({ scrollTop: 0 }, 500, 'swing');
+                });
+        }
+        protected BindingMovie(bindingBuilder: DomBehind.TemplateListViewBindingBehaviorBuilder<HomeViewModel, MovieInfo>) {
+            bindingBuilder
                 .BindingProperty(UIElement.SrcProperty, ".movie_thumbnail", x => x.Thumbnail)
                 .BindingProperty(UIElement.TextProperty, ".movie_duration", x => x.Duration)
                 .BindingProperty(UIElement.TextProperty, ".movie_title", x => x.Title)
                 .BindingProperty(UIElement.TextProperty, ".movie_owner", x => x.Owner)
                 .BindingProperty(UIElement.TextProperty, ".movie_views", x => x.Views)
                 .BindingProperty(UIElement.TextProperty, ".movie_publish", x => x.UpdateDate, { convertTarget: x => this.DateDiff(x) })
+                .BindingProperty(UIElement.IsVisibleProperty, ".movie_watched", x => x.IsWatched, { mode: DomBehind.Data.BindingMode.TwoWay })
                 .BindingColumnAction(".movie_play", (x, args) => x.Play(args))
                 .BindingColumnAction(".movie_download", (x, args) => x.Download(args));
-            builder.Element(".niconico")
-                .Binding(UIElement.IsVisibleProperty, x => x.AllowSearchNiconico);
-
-
-
-            builder.Element(".moreButton")
-                .BindingAction(UIElement.Click, x => x.More());
         }
 
-
+        public Select(sort: string, result: number) {
+            this.SelectSort(sort);
+            this.SelectResult(`.Result${result}`);
+        }
 
         public Sort(vm: HomeViewModel, cls: string) {
+            this.SelectSort(cls);
+
+            vm.Sort = cls;
+            vm.Search();
+        }
+        private SelectSort(cls: string) {
             this.Container.find(".sortContainer a").css("font-weight", "normal");
             let el = this.Container.find(`.${cls}`);
             if (el.length) {
                 el.css("font-weight", "bold");
             }
-            vm.Sort = cls;
-            vm.Search();
-
-            //this.ToggleFilter(1000, "easeOutSine");
         }
+
         public Result(vm: HomeViewModel, cls: string, length: number) {
+            this.SelectResult(cls);
+
+            vm.Result = length;
+            vm.Search();
+        }
+        private SelectResult(cls: string) {
             this.Container.find(".resultContainer a").css("font-weight", "normal");
             let el = this.Container.find(`${cls}`);
             if (el.length) {
                 el.css("font-weight", "bold");
             }
-
-            vm.Result = length;
-            vm.Search();
-
-            //this.ToggleFilter(1000, "easeOutSine");
         }
 
         protected ToggleFilter(duration: number = 0, easing?: string) {
             let element = this.Container.find(".filterContainer");
             element.toggleClass("hide");
         }
-
     }
 }

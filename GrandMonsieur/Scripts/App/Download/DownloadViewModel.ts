@@ -3,8 +3,10 @@
 
         public History: DomBehind.Data.ListCollectionView;
         Initialize(): void {
-            NProgress.start();
+        }
 
+        public Activate() {
+            NProgress.start();
 
             let history = this.GetTable(DownloadInfo);
             history.List().done(x => {
@@ -18,9 +20,10 @@
             });
         }
 
-
         public Download(e: DownloadInfo) {
-            this.DownloadRaw(e);
+            e.Status = DownloadStatus.Doing;
+            
+
         }
 
         public Play(e: DownloadInfo) {

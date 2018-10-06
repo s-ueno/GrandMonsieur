@@ -24,13 +24,6 @@
             });
         }
 
-        public DownloadRaw(e: MovieInfo) {
-            let table = this.GetTable(DownloadInfo);
-            table.UpsertAsync(new DownloadInfo(e), x => x.Uri).always(() => {
-                this.Navigator.Move("Download");
-            });
-        }
-
         public PlayRaw(e: MovieInfo) {
             $.SetDomStorage("Player_Uri", e.Source.EmbededUri);
             this.Navigator.ShowModal(`home/player`, {
@@ -48,6 +41,7 @@
             cleanInfo.Source = e.Source;
             cleanInfo.UpdateDate = e.UpdateDate;
             cleanInfo.LastPlayDate = new Date();
+            cleanInfo.IsWatched = true;
             let table = this.GetTable(MovieInfo);
             table.FindRowAsync(x => x.Uri, e.Uri).always(() => {
                 table.UpsertAsync(cleanInfo, y => y.Uri).fail(err => console.error(err));

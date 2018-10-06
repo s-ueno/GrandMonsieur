@@ -8,10 +8,13 @@
         Uri: any;
         Source: any;
         UpdateDate: string;
-
+        IsWatched?: boolean;
         LastPlayDate?: Date;
     }
 
+    export enum DownloadStatus {
+        None, Doing, Done
+    }
     export class DownloadInfo extends MovieInfo {
         constructor(src?: MovieInfo) {
             super();
@@ -26,11 +29,13 @@
                 this.UpdateDate = src.UpdateDate;
                 this.LastPlayDate = src.LastPlayDate;
                 this.AddDownloadListDate = new Date();
+                this.Status = DownloadStatus.None;
             }
         }
         public AddDownloadListDate?: Date;
         public DownloadedDate?: Date;
-
+        public Status?: DownloadStatus;
     }
+    
 
 }

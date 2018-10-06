@@ -50,7 +50,7 @@ namespace GrandMonsieur.Core
             set;
         }
 
-        protected virtual object PageToken
+        public virtual object PageToken
         {
             get;
             set;

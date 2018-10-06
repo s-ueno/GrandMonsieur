@@ -8,7 +8,7 @@
             let rowContext =
                 builder.Element(".history_container")
                     .BuildTemplateItems<MovieInfo>(x => x.History, {
-                        template: "#downloadTemplate",
+                        template: "#historyTemplate",
                     });
             rowContext
                 .BindingProperty(UIElement.SrcProperty, ".movie_thumbnail", x => x.Thumbnail)

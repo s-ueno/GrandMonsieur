@@ -11,6 +11,7 @@ namespace GrandMonsieur.Controllers
         public string Filter { get; set; }
         public string SortList { get; set; }
         public int SearchCount { get; set; }
+        public string PageToken { get; set; }
     }
     public class SearchResponse
     {
@@ -60,6 +61,7 @@ namespace GrandMonsieur.Controllers
             query.MaxResults = request.SearchCount;
             query.Filter = request.Filter;
             query.Order = ParseEnum<OrderMode>(request.SortList);
+            query.PageToken = request.PageToken;
             var helper = new QueryHelper();
             response.Response = helper.FindQuery(query);
             return response;
