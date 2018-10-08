@@ -557,7 +557,7 @@ declare namespace DomBehind {
         header?: string;
         expression?: (row: any) => any;
         expressionAction?: (owner: any, row: any) => void;
-        convertTarget?: (value: any) => any;
+        convertTarget?: (value: any, element?: any) => any;
         attachedEvent?: IEventBuilder;
         dependencyProperty?: Data.DependencyProperty;
         mode?: Data.BindingMode;
@@ -611,6 +611,7 @@ declare namespace DomBehind {
         static ValueProperty: Data.DependencyProperty;
         static TextProperty: Data.DependencyProperty;
         static SrcProperty: Data.DependencyProperty;
+        static HrefProperty: Data.DependencyProperty;
         static IsEnabledProperty: Data.DependencyProperty;
         static IsVisibleProperty: Data.DependencyProperty;
         static OpacityProperty: Data.DependencyProperty;

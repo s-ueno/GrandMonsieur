@@ -3511,6 +3511,7 @@ var DomBehind;
         UIElement.ValueProperty = DomBehind.Data.DependencyProperty.RegisterAttached("val", function (x) { return x.val(); }, function (x, y) { return x.val(y); }, DomBehind.Data.UpdateSourceTrigger.LostForcus, DomBehind.Data.BindingMode.TwoWay);
         UIElement.TextProperty = DomBehind.Data.DependencyProperty.RegisterAttached("text", function (x) { return x.text(); }, function (x, y) { return x.text(y); }, DomBehind.Data.UpdateSourceTrigger.LostForcus, DomBehind.Data.BindingMode.TwoWay);
         UIElement.SrcProperty = DomBehind.Data.DependencyProperty.RegisterAttached("src", function (x) { return x.attr("src"); }, function (x, y) { return x.attr("src", y); }, DomBehind.Data.UpdateSourceTrigger.Explicit, DomBehind.Data.BindingMode.OneWay);
+        UIElement.HrefProperty = DomBehind.Data.DependencyProperty.RegisterAttached("href", function (x) { return x.attr("href"); }, function (x, y) { return x.attr("href", y); }, DomBehind.Data.UpdateSourceTrigger.Explicit, DomBehind.Data.BindingMode.OneWay);
         UIElement.IsEnabledProperty = DomBehind.Data.DependencyProperty.RegisterAttached("enabled", null, function (x, y) {
             var disabled = y === false ? true : false;
             if (disabled === true) {
@@ -4427,7 +4428,7 @@ var DomBehind;
                                 // one time
                                 var ret = column.expression(value);
                                 if (column.convertTarget) {
-                                    ret = column.convertTarget(ret);
+                                    ret = column.convertTarget(ret, el);
                                 }
                                 column.dependencyProperty.SetValue(el, ret);
                                 // two way
@@ -4478,7 +4479,7 @@ var DomBehind;
                                     var v = sender[d.Name]; /* ループの中で、常にプロパティに再アクセスして、元の値を参照する */
                                     var twoway = twowayList[i];
                                     if (twoway.column.convertTarget) {
-                                        v = twoway.column.convertTarget(v);
+                                        v = twoway.column.convertTarget(v, twoway.element);
                                     }
                                     twoway.column.dependencyProperty.SetValue(twoway.element, v);
                                 }

@@ -30,12 +30,16 @@
                 this.LastPlayDate = src.LastPlayDate;
                 this.AddDownloadListDate = new Date();
                 this.Status = DownloadStatus.None;
+                this.NotifyInfomation = "";
+                this.DownloadUri = "";
+                this.DownloadUriAlias = "";
             }
         }
         public AddDownloadListDate?: Date;
         public DownloadedDate?: Date;
         public Status?: DownloadStatus;
+        public NotifyInfomation?: string;
+        public DownloadUri?: string;
+        public DownloadUriAlias?: string;
     }
-    
-
 }

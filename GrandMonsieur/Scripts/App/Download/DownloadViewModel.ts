@@ -1,8 +1,31 @@
 ﻿namespace GrandMonsieur.Download {
+
+
     export class DownloadViewModel extends AppViewModel {
 
         public History: DomBehind.Data.ListCollectionView;
         Initialize(): void {
+            AppMediator.Starting.AddHandler((sender, e) => {
+                let target = this.GetDownloadInfo(e.uri)
+                if (target)
+                    target.NotifyInfomation = e.message;
+            });
+            AppMediator.Downloading.AddHandler((sender, e) => {
+                let target = this.GetDownloadInfo(e.uri)
+                if (target) {
+                    setTimeout(() => {
+                        target.NotifyInfomation = e.message;
+                    }, 10);
+                }
+            });
+        }
+
+        protected GetDownloadInfo(uri: string): DownloadInfo {
+            if (!this.History) return null;
+            let arr: Array<DownloadInfo> = this.History.ToArray();
+            if (!arr || arr.length === 0) return null;
+
+            return arr.FirstOrDefault(x => x.Uri === uri);
         }
 
         public Activate() {
@@ -13,6 +36,7 @@
                 if (x instanceof Array) {
                     let ordered = x.OrderByDecording(x => x.LastPlayDate);
                     this.History = new DomBehind.Data.ListCollectionView(ordered);
+
                 }
             }).always(() => {
                 NProgress.done();
@@ -22,8 +46,15 @@
 
         public Download(e: DownloadInfo) {
             e.Status = DownloadStatus.Doing;
-            
-
+            e.NotifyInfomation = "Please wait...";
+            return DownloadRequest(e.Uri).done((x: { Uri, Path, Name }) => {
+                e.Status = DownloadStatus.Done;
+                e.NotifyInfomation = "complate!!";
+                e.DownloadUri = x.Path;
+                e.DownloadUriAlias = x.Name;
+            }).fail(x => {
+                e.Status === DownloadStatus.None;
+            });
         }
 
         public Play(e: DownloadInfo) {

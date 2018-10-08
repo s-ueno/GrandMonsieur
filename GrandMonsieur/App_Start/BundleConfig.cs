@@ -38,6 +38,8 @@ namespace GrandMonsieur
             "~/Scripts/jquery-{version}.js",
             "~/Scripts/jquery.validate*",
             "~/Scripts/jquery-ui*",
+            "~/Scripts/jquery.signalR-{version}.js",
+
             "~/Scripts/nprogress.js",
             "~/Scripts/toastr.js",
 
@@ -53,14 +55,11 @@ namespace GrandMonsieur
             "~/Scripts/dombehind.js",
             "~/Scripts/domBehind.plugin.jqueryui.js",
 
-
-            "~/Scripts/App/App.js",
-            "~/Scripts/App/Startup.js",
             "~/Scripts/App/SupportSites.js",
             "~/Scripts/App/AppMediator.js",
 
-            //"~/Scripts/App/Widget/Movie.js",
-            //"~/Scripts/App/Widget/MovieHistory.js",
+            "~/Scripts/App/App.js",
+            "~/Scripts/App/Startup.js",
 
             "~/Scripts/App/AppViewModel.js",
             "~/Scripts/App/AppView.js",

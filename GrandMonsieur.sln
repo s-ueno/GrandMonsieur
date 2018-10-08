@@ -8,9 +8,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrandMonsieur.Core", "GrandMonsieur.Core\GrandMonsieur.Core.csproj", "{D08734CA-253F-494A-9863-DE228C507D1B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B5006EC2-EB7D-41A1-87DD-FDB49DF89ECE}"
-	ProjectSection(SolutionItems) = preProject
-		youtube-dl.exe = youtube-dl.exe
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
