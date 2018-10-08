@@ -5,19 +5,18 @@
 
         public History: DomBehind.Data.ListCollectionView;
         Initialize(): void {
-            AppMediator.Starting.AddHandler((sender, e) => {
-                let target = this.GetDownloadInfo(e.uri)
-                if (target)
+            AppMediator.Starting.AddHandler((sender, e) => this.OnNorification(e));
+            AppMediator.Downloading.AddHandler((sender, e) => this.OnNorification(e));
+            AppMediator.ErrorLogging.AddHandler((sender, e) => this.OnNorification(e));
+        }
+
+        private OnNorification(e: { uri: string; message: string; }) {
+            let target = this.GetDownloadInfo(e.uri);
+            if (target) {
+                setTimeout(() => {
                     target.NotifyInfomation = e.message;
-            });
-            AppMediator.Downloading.AddHandler((sender, e) => {
-                let target = this.GetDownloadInfo(e.uri)
-                if (target) {
-                    setTimeout(() => {
-                        target.NotifyInfomation = e.message;
-                    }, 10);
-                }
-            });
+                }, 10);
+            }
         }
 
         protected GetDownloadInfo(uri: string): DownloadInfo {
