@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,33 +21,31 @@ namespace GrandMonsieur
             using (var downloader = new Core.Downloader(
                 System.IO.Path.Combine(root, "youtube-dl.exe")))
             {
-                var ex = downloader.GetExtension(uri);
+                downloader.ErrorLogging += async (sender, e) =>
+                {
+                    await caller.Error(new { Uri = uri, e.Message });
+                };
+                downloader.Downloding += async (sender, e) =>
+                {
+                    await caller.Downloading(new { Uri = uri, e.Message });
+                };
 
                 var fileName = downloader.GetFileName(uri);
 
                 await caller.Starting(new { Uri = uri, FileName = fileName });
 
-                downloader.Downloding += async (sender, e) =>
-                {
-                    await caller.Downloading(new { Uri = uri, e.Message });
-                };
-                downloader.ErrorLogging += async (sender, e) =>
-                {
-                    await caller.Error(new { Uri = uri, e.Message });
-                };
-
                 var dir = "App_Data";
                 var u = new Uri(uri);
                 var domain = GetSafeDirectoryName(u.Authority);
                 var name = GetSafeDirectoryName(u.Segments.LastOrDefault());
-                var saveFileName = GetSafeFileName(fileName);
+                var extension = Path.GetExtension(fileName);
                 var saveDirectory = Path.Combine(root, dir, domain, name);
                 if (!Directory.Exists(saveDirectory))
                 {
                     Directory.CreateDirectory(saveDirectory);
                 }
 
-
+                var saveFileName = $"{Guid.NewGuid()}{extension}";
                 var vp = $"{Site()}{dir}/{domain}/{name}/{saveFileName}";
 
                 var fullPath = Path.Combine(saveDirectory, saveFileName);
@@ -57,16 +56,6 @@ namespace GrandMonsieur
                 }
 
                 return new { Uri = uri, Path = vp, Name = fileName };
-
-                //var dir = "App_Data";
-                //if (!Directory.Exists(dir))
-                //{
-                //    Directory.CreateDirectory(dir);
-                //}
-
-                //var vp = $"{Site()}/{domain}/{name}/{saveFileName}";
-                //var saveFileName = $"{Guid.NewGuid().ToString()}";
-
             }
         }
 
@@ -87,15 +76,14 @@ namespace GrandMonsieur
         }
         protected string GetSafeName(string s, char[] invalitChars)
         {
-            var charList = new List<char>();
-            foreach (var each in s)
+            string illegal = "\"M\"\\a/ry/ h**ad:>> a\\/:*?\"| li*tt|le|| la\"mb.?";
+            string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+
+            foreach (char c in invalid)
             {
-                if (!invalitChars.Contains(each))
-                {
-                    charList.Add(each);
-                }
+                illegal = illegal.Replace(c.ToString(), "");
             }
-            return new string(charList.ToArray());
+            return illegal;
         }
     }
 }

@@ -20,34 +20,40 @@ namespace GrandMonsieur
         }
 
         public static readonly string[] Css = new string[] {
+             /* "~/Content/themes/base/all.css", */
+             "~/Content/themes/base/base.css",
+             "~/Content/themes/base/theme.css",
+             "~/Content/themes/base/jquery-ui.css",
+
              "~/Content/bootstrap*",
-             "~/Content/themes/base/all.css",
-             "~/Content/jquery.ui.layout.css",
-             "~/Content/font-awesome.css",
              "~/Content/bootstrap-switch/bootstrap3/bootstrap-switch.css",
+
+             "~/Content/font-awesome.css",             
              "~/Content/nprogress.css",
              "~/Content/toastr.css",
+
              "~/Content/custom.css",
              "~/Content/Site.css",
+
              "~/Content/Home/Home.css",
              "~/Content/Shared/Shared.css",
         };
 
         public static readonly string[] NugetJs = new string[] {
-            "~/Scripts/bootstrap.js",
             "~/Scripts/jquery-{version}.js",
             "~/Scripts/jquery.validate*",
             "~/Scripts/jquery-ui*",
             "~/Scripts/jquery.signalR-{version}.js",
 
+            "~/Scripts/bootstrap.js",
+            "~/Scripts/bootstrap-switch.js",
+
             "~/Scripts/nprogress.js",
             "~/Scripts/toastr.js",
-
             "~/Scripts/numeral/numeral.js",
             "~/Scripts/numeral/locales/ja.js",
 
-            "~/Scripts/collections.js",
-            "~/Scripts/bootstrap-switch.js",
+            "~/Scripts/collections.js",            
         };
 
         public static readonly string[] AppJs = new string[] {

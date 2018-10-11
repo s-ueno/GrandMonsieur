@@ -13,10 +13,6 @@ namespace GrandMonsieur
     {
         public void Configuration(IAppBuilder app)
         {
-            // app.MapSignalR<PushConnectionAdapter>("/Download");
-
-
-
             GlobalHost.DependencyResolver.Register(typeof(Download), () => new Download());
             app.MapSignalR("/DownloadHub", new HubConfiguration()
             {
