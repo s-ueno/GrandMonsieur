@@ -18,8 +18,7 @@ namespace GrandMonsieur
         {
             var caller = Clients.Caller;
             var root = HttpContext.Current.Server.MapPath("/");
-            using (var downloader = new Core.Downloader(
-                System.IO.Path.Combine(root, "youtube-dl.exe")))
+            using (var downloader = new Core.Downloader(root))
             {
                 downloader.ErrorLogging += async (sender, e) =>
                 {
@@ -30,28 +29,26 @@ namespace GrandMonsieur
                     await caller.Downloading(new { Uri = uri, e.Message });
                 };
 
-                var fileName = downloader.GetFileName(uri);
+                var fileName = await downloader.GetFileNameAsync(uri);
 
                 await caller.Starting(new { Uri = uri, FileName = fileName });
 
                 var dir = "App_Data";
-                var u = new Uri(uri);
-                var domain = GetSafeDirectoryName(u.Authority);
-                var name = GetSafeDirectoryName(u.Segments.LastOrDefault());
-                var extension = Path.GetExtension(fileName);
-                var saveDirectory = Path.Combine(root, dir, domain, name);
+                var saveDirectory = Path.Combine(root, dir);
                 if (!Directory.Exists(saveDirectory))
                 {
                     Directory.CreateDirectory(saveDirectory);
                 }
 
-                var saveFileName = $"{Guid.NewGuid()}{extension}";
-                var vp = $"{Site()}{dir}/{domain}/{name}/{saveFileName}";
+                var saveFileName = $"{/* Guid.NewGuid() */ Path.GetFileNameWithoutExtension(Path.GetTempFileName())}{Path.GetExtension(fileName)}";
+                var vp = $"{Site()}{dir}/{saveFileName}";
 
                 var fullPath = Path.Combine(saveDirectory, saveFileName);
 
                 if (!File.Exists(fullPath))
                 {
+                    Trace.TraceInformation($"★★★{uri}★★★{fullPath}");
+
                     await downloader.Do(uri, fullPath);
                 }
 
@@ -65,19 +62,10 @@ namespace GrandMonsieur
             var path = HttpRuntime.AppDomainAppVirtualPath;
             return string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, path);
         }
-
-        protected string GetSafeFileName(string s)
-        {
-            return GetSafeName(s, System.IO.Path.GetInvalidFileNameChars());
-        }
-        protected string GetSafeDirectoryName(string s)
-        {
-            return GetSafeName(s, System.IO.Path.GetInvalidPathChars());
-        }
-        protected string GetSafeName(string s, char[] invalitChars)
+        protected string GetSafeName(string s)
         {
             string illegal = "\"M\"\\a/ry/ h**ad:>> a\\/:*?\"| li*tt|le|| la\"mb.?";
-            string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+            string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars()) + " " + "　";
 
             foreach (char c in invalid)
             {

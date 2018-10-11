@@ -21,11 +21,9 @@ namespace GrandMonsieur.Core
         public string Message { get; private set; }
     }
 
-
-
     public class Downloader : IDisposable
     {
-        protected string UtilityPath;
+        protected string UtilityPath { get; private set; }
         public Downloader(string utilityPath)
         {
             this.UtilityPath = utilityPath;
@@ -63,34 +61,8 @@ namespace GrandMonsieur.Core
             }
         }
 
-
         public event EventHandler<DownloaderMessageEventArgs> ErrorLogging;
         public event EventHandler<DownloaderMessageEventArgs> Downloding;
-
-        public async Task Do(string uri, string savePath)
-        {
-            var ydlClient = new YoutubeDL();
-            ydlClient.YoutubeDlPath = this.UtilityPath;
-
-            ydlClient.Options.DownloadOptions.FragmentRetries = -1;
-            ydlClient.Options.DownloadOptions.Retries = -1;
-            ydlClient.Options.VideoFormatOptions.Format = VideoFormat.best;
-            ydlClient.Options.PostProcessingOptions.AudioFormat = AudioFormat.best;
-            ydlClient.Options.PostProcessingOptions.AudioQuality = "0";
-            ydlClient.Options.PostProcessingOptions.ExtractAudio = true;
-            ydlClient.Options.GeneralOptions.Update = true;
-            ydlClient.Options.FilesystemOptions.Output = savePath;
-
-            ydlClient.StandardErrorEvent += (sender, e) =>
-            {
-                OnErrorLogging(e);
-            };
-            ydlClient.StandardOutputEvent += (sender, s) =>
-            {
-                OnDownloading(s);
-            };
-            await ydlClient.DownloadAsync(uri);
-        }
 
         protected void OnDownloading(String message)
         {
@@ -101,14 +73,29 @@ namespace GrandMonsieur.Core
             ErrorLogging?.Invoke(this, new DownloaderMessageEventArgs(message));
         }
 
-        public Task<string> GetFileName(string uri)
+        public async Task Do(string uri, string savePath)
         {
-            return GetInfo("--get-filename ", uri).FirstOrDefault();
+            // --output \"~/ Desktop /% (title)s.% (ext)s\"
+            var (fileName, arguments) = CreateCommand($"--output {savePath} -f best ", uri);
+            Trace.TraceInformation($"★★★{fileName}★★★{arguments}");
+            await ExecuteAsync(fileName, arguments, message =>
+            {
+                OnDownloading(message);
+
+            }, error =>
+            {
+                OnErrorLogging(error);
+            });
         }
 
-        public string GetExtension(string uri)
+        public async Task<string> GetFileNameAsync(string uri)
         {
-            var allInfo = GetInfo("--list-format", uri).ToArray();
+            return (await GetInfoAsync("-f best --get-filename ", uri)).FirstOrDefault();
+        }
+
+        public async Task<string> GetExtensionAsync(string uri)
+        {
+            var allInfo = (await GetInfoAsync("--list-format", uri)).ToArray();
             var best = allInfo.FirstOrDefault(x => x.Contains("(best)")) ?? allInfo.FirstOrDefault();
             if (string.IsNullOrWhiteSpace(best)) return null;
 
@@ -116,13 +103,30 @@ namespace GrandMonsieur.Core
             return ext;
         }
 
-        protected async Task<IEnumerable<string>> GetInfo(string args, string uri)
+        protected async Task<IEnumerable<string>> GetInfoAsync(string command, string uri)
         {
-
+            var (fileName, arguments) = CreateCommand(command, uri);
+            var result = await ExecuteAsync(fileName, arguments);
+            return result.Log;
         }
 
+        protected (string FileName, string Arguments) CreateCommand(string command, string uri)
+        {
+            var execPath = Path.Combine(UtilityPath, "youtube-dl.exe");
+            var args = $"{command} {uri}";
 
-        protected async Task<(IEnumerable<string> Log, IEnumerable<string> Error)> Execute(string fileName, string arguments,
+            // Azureの場合は、youtube-dl.exeが動かないので、pipでインストールした実ライブラリを直接キックする
+            var pythonPath = PythonPath;
+            if (!string.IsNullOrWhiteSpace(pythonPath))
+            {
+                var libPath = Path.Combine(Path.GetDirectoryName(pythonPath), "lib", "site-packages", "youtube_dl");
+                execPath = pythonPath;
+                args = $"{libPath} {command} {uri}";
+            }
+            return (execPath, args);
+        }
+
+        protected async Task<(IEnumerable<string> Log, IEnumerable<string> Error)> ExecuteAsync(string fileName, string arguments,
             Action<string> outputReceived = null, Action<string> errorReceived = null)
         {
             var timeout = this.Timeout;
@@ -186,42 +190,7 @@ namespace GrandMonsieur.Core
                     return (output, error);
                 }
             }
-
-            //var info = new ProcessStartInfo
-            //{
-            //    FileName = this.UtilityPath,
-            //    Arguments = $"{command} {uri}",
-            //    UseShellExecute = false,
-            //    RedirectStandardOutput = true,
-            //    CreateNoWindow = true
-            //};
-
-            //// Azureの場合は、youtube-dl.exeが動かないので、pipでインストールした実ライブラリを直接キックする
-            //var pythonPath = this.PythonPath;
-            //Trace.TraceInformation($"★{pythonPath}");
-            //if (!string.IsNullOrWhiteSpace(pythonPath))
-            //{
-            //    var libPath = Path.Combine(Path.GetDirectoryName(pythonPath), "lib", "site-packages", "youtube_dl");
-            //    Trace.TraceInformation($"★★{libPath}");
-
-            //    info.FileName = $"{pythonPath}";
-            //    info.Arguments = $"{libPath} {command} {uri}";
-            //}
-
-            //var p = new Process { StartInfo = info };
-            //p.Start();
-            //while (!p.StandardOutput.EndOfStream)
-            //{
-            //    string line = p.StandardOutput.ReadLine();
-            //    Trace.TraceInformation($"GetInfo ... {line}");
-            //    yield return line;
-            //}
-
-
-
-            //p.WaitForExit();
         }
-
 
         public void Dispose()
         {
