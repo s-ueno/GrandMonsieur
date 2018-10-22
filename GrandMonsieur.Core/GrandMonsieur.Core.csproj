@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Downloader.cs" />
+    <Compile Include="Query\BilibiliQuery.cs" />
     <Compile Include="Query\DailymotionQuery.cs" />
     <Compile Include="Definition.cs" />
     <Compile Include="Duration.cs" />

@@ -7,6 +7,7 @@
             this.EnsureSwitch("#allow_youtube", "YouTube");
             this.EnsureSwitch("#allow_dailymotion", "dailymotion");
             this.EnsureSwitch("#allow_niconico", "niconico");
+            this.EnsureSwitch("#allow_bilibili", "bilibili");
         }
         private EnsureSwitch(selector: string, title: string) {
             let sw = $(selector).bootstrapSwitch({
@@ -15,7 +16,7 @@
                 labelWidth: "100px",
                 state: $.GetLocalStorage(title, true),
             });
-            sw.on("switchChange.bootstrapSwitch", (e : any) => {
+            sw.on("switchChange.bootstrapSwitch", (e: any) => {
                 let checked = e.target.checked;
                 $.SetLocalStorage(title, checked);
 
@@ -30,11 +31,21 @@
                 .BindingAction(UIElement.Click, x => x.Refresh());
             builder.Element(".search-input")
                 .Binding(UIElement.ValueProperty, x => x.SearchString)
-                .BindingAction(UIElement.Enter, x => x.Search())
+                .BindingAction(UIElement.Enter, x => {
+                    let nav = this.Container.find("#sidebar-menu");
+                    let active = nav.find(".current-page");
+                    let identity = nav.data("identity");
+                    x.Search(identity);
+                })
                 .BuildSuggest(DomBehind.SuggestSource.Google, 300);
 
             builder.Element(".search-input-button")
-                .BindingAction(UIElement.Click, x => x.Search());
+                .BindingAction(UIElement.Click, x => {
+                    let nav = this.Container.find("#sidebar-menu");
+                    let active = nav.find(".current-page");
+                    let identity = nav.data("identity");
+                    x.Search(identity);
+                });
 
             // バインドしない、直DOM操作は、コードビハインド上でインラインコード
             builder.Element("#menu_toggle")
@@ -118,6 +129,9 @@
             NProgress.start();
 
             let oldPathName = location.pathname;
+            if (oldPathName === "/")
+                oldPathName += "home/index";
+
             let oldDom = $($('.main > div:not([display=none])')[0]);
 
             if (!oldDom.hasClass('menu-cache')) {
@@ -139,7 +153,7 @@
                 newDom.attr("id", newDom.attr("data-menu-cache-id"));
                 newDom.show();
                 // notify activate
-                newDom.trigger(UIElement.Activate.EventName);  
+                newDom.trigger(UIElement.Activate.EventName);
 
                 setTimeout(() => {
                     this.UpdateMenu();

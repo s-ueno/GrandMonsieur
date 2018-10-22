@@ -82,6 +82,7 @@ declare namespace DomBehind {
         protected NotifyEvent<TEvent>(event: TypedEvent<TEvent>, args: TEvent): void;
         Title: string;
         private _title;
+        IsVisible: boolean;
         View: BizView;
         private _view;
         protected OnViewChanged(): void;
@@ -149,6 +150,7 @@ declare namespace DomBehind {
     class Locator {
         private static _container;
         static Push(ins: any): void;
+        static ToArray(): any[];
         static List<T>(typeT: new (...params: any[]) => T, predicate?: (obj: T) => boolean): T[];
         static First<T>(typeT: new (...params: any[]) => T, predicate?: (obj: T) => boolean): T;
         static Remove<T>(typeT: new (...params: any[]) => T, predicate?: (obj: T) => boolean): void;
@@ -178,6 +180,21 @@ declare namespace DomBehind {
 }
 
 
+
+declare namespace DomBehind {
+    class Breadbrumb {
+        Selector: string;
+        constructor(Selector: string);
+        Parse(newUri: string, title: string, isRoot?: boolean): string;
+        protected ToCompress(input: any): string;
+        protected ToDecompress(input: string): any;
+        protected static SplitQueryString(s: string): Array<{
+            Key: string;
+            Value: string;
+        }>;
+        Update(): void;
+    }
+}
 
 declare namespace DomBehind {
     interface IFileInfo {
@@ -1087,6 +1104,9 @@ interface String {
     PadLeft(totalWidth: number, paddingChar: string): string;
     PadRight(totalWidth: number, paddingChar: string): string;
     SubString(start: number, length: number): string;
+    Contains(s: string): boolean;
+    StartsWith(s: string): boolean;
+    EndsWith(s: string): boolean;
 }
 
 

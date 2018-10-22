@@ -8,6 +8,8 @@
         }
 
         public AddDownloadList(e: MovieInfo) {
+            this.UpdateMovieInfo(e);
+
             let table = this.GetTable(DownloadInfo);
             table.FindRowAsync(x => x.Uri, e.Uri).done(x => {
                 if (x && x.DownloadedDate) {
@@ -30,7 +32,11 @@
                 ShowHeader: false,
             })
 
+            this.UpdateMovieInfo(e);
+        }
 
+
+        private UpdateMovieInfo(e: MovieInfo) {
             let cleanInfo = new MovieInfo();
             cleanInfo.Thumbnail = e.Thumbnail;
             cleanInfo.Duration = e.Duration;
@@ -40,13 +46,11 @@
             cleanInfo.Uri = e.Uri;
             cleanInfo.Source = e.Source;
             cleanInfo.UpdateDate = e.UpdateDate;
-            cleanInfo.LastPlayDate = new Date();
-            cleanInfo.IsWatched = true;
+            cleanInfo.MovieStatus = e.MovieStatus;
             let table = this.GetTable(MovieInfo);
             table.FindRowAsync(x => x.Uri, e.Uri).always(() => {
                 table.UpsertAsync(cleanInfo, y => y.Uri).fail(err => console.error(err));
             });
         }
-
     }
 }

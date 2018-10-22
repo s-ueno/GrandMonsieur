@@ -10,6 +10,10 @@
         public get AllowSearchNiconico(): boolean {
             return $.GetLocalStorage("niconico", true);
         }
+        public get AllowSearchBilibili(): boolean {
+            return $.GetLocalStorage("bilibili", true);
+        }
+
 
         public get Sort(): string {
             let value = $.GetLocalStorage("Sort", "Relevance");
@@ -42,19 +46,14 @@
         public NiconicoList: DomBehind.Data.ListCollectionView;
         protected NextNiconicoListAction: Function;
 
+        public BilibiliList: DomBehind.Data.ListCollectionView;
+        protected NextBilibiliListAction: Function;
+
+
         public WatchedList: Array<MovieInfo>;
         Initialize(): void {
             // ポータルから検索イベントをサブスクライブ
-            AppMediator.SearchEvent.Clear();
-            AppMediator.SearchEvent.AddHandler((sender, e) => {
-                if (e.search !== this.oldNiconicoSearchValue) {
-                    this.niconicoPageToken = 0;
-                }
-                this.oldNiconicoSearchValue = e.search;
-
-                this.SearchRaw(e.search, e.site);
-            });
-
+            AppMediator.SearchEvent.AddHandler((sender, e) => this.OnSearch(e));
             AppMediator.TargetSiteChanged.Clear();
             AppMediator.TargetSiteChanged.AddHandler((sender, e) => this.UpdateTarget());
 
@@ -64,6 +63,20 @@
             table.List().done(x => this.WatchedList = x);
 
             this.Search(true);
+        }
+
+        private OnSearch(e: { search: string; site: SupportSites; }) {
+            if (!this.IsVisible) return;
+
+            if (e.search !== this.oldNiconicoSearchValue) {
+                this.niconicoPageToken = 0;
+            }
+            this.oldNiconicoSearchValue = e.search;
+            if (e.search !== this.oldBilibiliSearchValue) {
+                this.bilibiliPageToken = 0;
+            }
+            this.oldBilibiliSearchValue = e.search;
+            this.SearchRaw(e.search, e.site);
         }
 
         public Search(init: boolean = false) {
@@ -87,7 +100,6 @@
 
         protected CreateListCollectionView(response): DomBehind.Data.ListCollectionView {
             let list = new DomBehind.List<MovieInfo>();
-
             $.each(response.Items, (i, value) => {
                 let title: string = value.Title;
                 if (40 < title.length) {
@@ -97,7 +109,7 @@
                 if (owner && 20 < owner.length) {
                     owner = owner.substr(0, 20) + "...";
                 }
-                list.add({
+                let newRow: MovieInfo = {
                     Title: title,
                     Thumbnail: value.ThumbnailUri,
                     Duration: value.Duration,
@@ -106,26 +118,30 @@
                     UpdateDate: value.PublishedAt,
                     Uri: value.Uri,
                     Source: value,
-                    IsWatched: this.IsWatched(value.Uri),
-                });
+                    MovieStatus: MovieStatus.None,
+                }
+                if (this.WatchedList) {
+                    let row = this.WatchedList.FirstOrDefault(x => x.Uri === value.Uri)
+                    if (row) {
+                        newRow.LastUpdateDate = row.LastUpdateDate;
+                        if (row.MovieStatus)
+                            newRow.MovieStatus = row.MovieStatus;
+                    }
+                }
+                list.add(newRow);
             });
             let result: any = new DomBehind.Data.ListCollectionView(list.toArray());
             result.PageToken = response.PageToken;
             return result
         }
-        protected IsWatched(uri: string): boolean {
-            if (this.WatchedList) {
-                return this.WatchedList.Any(x => x.Uri === uri);
-            }
-            return false;
-        }
 
         protected SearchAll(search: string) {
             // hack
-            this.SearchRaw(search, SupportSites.Youtube | SupportSites.Dailymotion | SupportSites.NicoNico);
+            this.SearchRaw(search, SupportSites.All);
         }
         protected SearchRaw(search: string, site: SupportSites, pageToken?: any) {
             NProgress.start();
+
             return $.when(
                 this.ExecuteAjax(site & SupportSites.Youtube, search, pageToken).done(x => {
                     this.YoutubeList = this.CreateListCollectionView(x.Response);
@@ -148,31 +164,31 @@
                         }
                         this.SearchRaw(search, SupportSites.NicoNico, this.niconicoPageToken);
                     };
+                }),
+                this.ExecuteAjax(site & SupportSites.Bilibili, search, pageToken).done(x => {
+                    this.BilibiliList = this.CreateListCollectionView(x.Response);
+                    this.UpdateTarget();
+                    this.NextBilibiliListAction = () => {
+                        if (search === this.oldBilibiliSearchValue) {
+                            this.bilibiliPageToken += 1;
+                        } else {
+                            this.bilibiliPageToken = 0;
+                        }
+                        this.SearchRaw(search, SupportSites.Bilibili, this.bilibiliPageToken);
+                    };
                 })
             ).always(() => NProgress.done());
         }
         private oldNiconicoSearchValue: string;
         private niconicoPageToken: number = 0;
 
+        private oldBilibiliSearchValue: string;
+        private bilibiliPageToken: number = 0;
 
         private ExecuteAjax(site: SupportSites, query: string, pageToken?: any): JQueryPromise<any> {
-            let type = -1;
-            if (site === SupportSites.Youtube)
-                type = 0;
-            if (site === SupportSites.Dailymotion)
-                type = 1;
-            if (site === SupportSites.NicoNico)
-                type = 2;
-
-            if (site === -1) {
-                let d = $.Deferred();
-                d.resolve();
-                return d.promise();
-            }
-
             let svc = new SearchWebProxy();
             return svc.ExecuteAjax({
-                VideoType: type,
+                VideoType: site,
                 Filter: query,
                 SortList: this.Sort,
                 SearchCount: this.Result,
@@ -184,18 +200,23 @@
             this.NextYoutubeListAction();
             this.NextDailymotionListAction();
             this.NextNiconicoListAction();
+            this.NextBilibiliListAction();
         }
 
         public Download(e: MovieInfo) {
+            e.LastUpdateDate = new Date();
+            e.MovieStatus = MovieStatus.DownloadQueue;
             this.AddDownloadList(e);
         }
 
         public Play(e: MovieInfo) {
-            e.IsWatched = true;
-            if (this.WatchedList) {
+            e.LastUpdateDate = new Date();
+            if (e.MovieStatus !== MovieStatus.Downloaded)
+                e.MovieStatus = MovieStatus.Watched;
+
+            if (this.WatchedList && !this.WatchedList.Any(x => x.Uri === e.Uri)) {
                 this.WatchedList.push(e);
             }
-
             this.PlayRaw(e);
         }
     }

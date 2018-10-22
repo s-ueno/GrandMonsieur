@@ -5,9 +5,16 @@
 
         public History: DomBehind.Data.ListCollectionView;
         Initialize(): void {
+            AppMediator.SearchEvent.AddHandler((sender, e) => this.OnSearch(e));
             AppMediator.Starting.AddHandler((sender, e) => this.OnNorification(e));
             AppMediator.Downloading.AddHandler((sender, e) => this.OnNorification(e));
             AppMediator.ErrorLogging.AddHandler((sender, e) => this.OnNorification(e));
+        }
+        private OnSearch(e: { search: string; site: SupportSites; }) {
+            if (!this.IsVisible) return;
+
+            this.History.Filter = (x: DownloadInfo) => x.Title.toLowerCase().Contains(e.search.toLowerCase());
+            this.History.Refresh();
         }
 
         private OnNorification(e: { uri: string; message: string; }) {
@@ -33,9 +40,12 @@
             let history = this.GetTable(DownloadInfo);
             history.List().done(x => {
                 if (x instanceof Array) {
-                    let ordered = x.OrderByDecording(x => x.LastPlayDate);
+                    let ordered: Array<DownloadInfo> = x;
+                    try {
+                        ordered = x.OrderByDecording(x => x.LastUpdateDate);
+                    } catch (e) {
+                    }
                     this.History = new DomBehind.Data.ListCollectionView(ordered);
-
                 }
             }).always(() => {
                 NProgress.done();
@@ -43,14 +53,26 @@
             });
         }
 
-        public Download(e: DownloadInfo) {
+        public Download(e: DownloadInfo, soundOnly: boolean) {
             e.Status = DownloadStatus.Doing;
             e.NotifyInfomation = "Please wait...";
-            return DownloadRequest(e.Uri).done((x: { Uri, Path, Name }) => {
+            return DownloadRequest(e.Uri, e.Title, soundOnly).done((x: { Uri, Path, Message }) => {
                 e.Status = DownloadStatus.Done;
-                e.NotifyInfomation = "complate!!";
+                e.NotifyInfomation = "ready!!";
                 e.DownloadUri = x.Path;
-                e.DownloadUriAlias = x.Name;
+                e.DownloadUriAlias = x.Message;
+                e.MovieStatus = MovieStatus.Downloaded;
+                let el: JQuery = (<any>e).__element;
+                if (el) {
+                    let downloadLink = el.find(".movie_downloadLink");
+                    if (0 < downloadLink.length) {
+                        setTimeout(() => downloadLink[0].click(), 100);
+                    }
+                }
+
+                let table = this.GetTable(DownloadInfo);
+                table.UpsertAsync(DownloadInfo.Clone(e), x => x.Uri);
+
             }).fail(x => {
                 e.Status === DownloadStatus.None;
             });

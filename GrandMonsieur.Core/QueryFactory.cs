@@ -14,6 +14,7 @@ namespace GrandMonsieur.Core
             list.Add(new YoutubeQuery());
             list.Add(new DailymotionQuery());
             list.Add(new NiconicoQuery());
+            list.Add(new BilibiliQuery());
             return list;
         }
 

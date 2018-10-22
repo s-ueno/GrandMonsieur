@@ -73,11 +73,11 @@ namespace GrandMonsieur.Core
             ErrorLogging?.Invoke(this, new DownloaderMessageEventArgs(message));
         }
 
-        public async Task Do(string uri, string savePath)
+        public async Task Do(string uri, string savePath, bool soundOnly)
         {
             // --output \"~/ Desktop /% (title)s.% (ext)s\"
-            var (fileName, arguments) = CreateCommand($"--output {savePath} -f best ", uri);
-            Trace.TraceInformation($"★★★{fileName}★★★{arguments}");
+            var format = soundOnly ? "bestaudio" : "best";
+            var (fileName, arguments) = CreateCommand($"--output \"{savePath}\" -f {format} ", uri);
             await ExecuteAsync(fileName, arguments, message =>
             {
                 OnDownloading(message);
@@ -88,9 +88,10 @@ namespace GrandMonsieur.Core
             });
         }
 
-        public async Task<string> GetFileNameAsync(string uri)
+        public async Task<string> GetFileNameAsync(string uri, bool soundOnly)
         {
-            return (await GetInfoAsync("-f best --get-filename ", uri)).FirstOrDefault();
+            var format = soundOnly ? "bestaudio" : "best";
+            return (await GetInfoAsync($"-f {format} --get-filename ", uri)).FirstOrDefault();
         }
 
         public async Task<string> GetExtensionAsync(string uri)
@@ -153,6 +154,7 @@ namespace GrandMonsieur.Core
                         else
                         {
                             outputReceived?.Invoke(e.Data);
+                            Trace.TraceInformation($"★★★{e.Data}");
                             output.Add(e.Data);
                         }
                     };

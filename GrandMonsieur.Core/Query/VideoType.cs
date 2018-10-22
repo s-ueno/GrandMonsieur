@@ -8,8 +8,9 @@ namespace GrandMonsieur.Core
 {
     public enum VideoType
     {
-        Youtube,
-        Dailymotion,
-        Niconico
+        Youtube = 1 << 0,
+        Dailymotion = 1 << 1,
+        Niconico = 1 << 2,
+        Bilibili = 1 << 3
     }
 }

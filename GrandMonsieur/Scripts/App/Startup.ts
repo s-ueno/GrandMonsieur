@@ -19,9 +19,9 @@ window.onload = function (e) {
     });
     __con.start().done(x => { }).fail(x => this.console.error(x));
 }
-function DownloadRequest(uri: string): JQueryPromise<any> {
+function DownloadRequest(uri: string, title: string, soundOnly: boolean): JQueryPromise<any> {
     let d = $.Deferred();
-    __proxy.invoke("RequestDownload", uri)
+    __proxy.invoke("RequestDownload", uri, title, soundOnly)
         .done(e => d.resolve(e))
         .fail(e => d.reject(e));
     return d.promise();

@@ -11,9 +11,9 @@ namespace GrandMonsieur.Core
 
         public Response FindQuery(Query query)
         {
-            var requestUri = query.Generate();
-            var result = Utils.JsonRead(requestUri);
-            return query.Parse(result);
+            var requestUri = query.BuildUri();
+            var result = query.GetDynamicData(requestUri);
+            return query.ParseDynamicData(result);
         }
 
     }

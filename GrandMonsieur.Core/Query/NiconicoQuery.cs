@@ -25,7 +25,7 @@ namespace GrandMonsieur.Core
             video, live
         }
 
-        public override string Generate()
+        public override string BuildUri()
         {
             var list = new List<string>();
             // list.Add("targets=title,description,tags&fields=contentId,title,viewCounter,startTime,lengthSeconds,thumbnailUrl");
@@ -78,7 +78,7 @@ namespace GrandMonsieur.Core
             return uri;
         }
 
-        public override Response Parse(dynamic json)
+        public override Response ParseDynamicData(dynamic json)
         {
             var response = new Response();
 

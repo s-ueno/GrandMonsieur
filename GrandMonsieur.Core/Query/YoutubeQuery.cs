@@ -31,7 +31,7 @@ namespace GrandMonsieur.Core
             this.Order = OrderMode.Relevance;
         }
 
-        public override string Generate()
+        public override string BuildUri()
         {
             var list = new List<string>();
             list.Add(string.Format("part={0}", "snippet"));
@@ -48,7 +48,7 @@ namespace GrandMonsieur.Core
             return YoutubeQuery.SearchUri + string.Join("&", list);
         }
 
-        public override Response Parse(dynamic json)
+        public override Response ParseDynamicData(dynamic json)
         {
             var response = new Response();
 

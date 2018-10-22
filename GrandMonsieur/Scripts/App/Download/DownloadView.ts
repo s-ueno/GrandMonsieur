@@ -16,7 +16,13 @@
                 .BindingProperty(UIElement.TextProperty, ".movie_owner", x => x.Owner)
                 .BindingProperty(UIElement.TextProperty, ".movie_views", x => x.Views, { convertTarget: x => this.Views(x) })
                 .BindingProperty(UIElement.TextProperty, ".movie_publish", x => x.UpdateDate, { convertTarget: x => this.DateDiff(x) })
-
+                .BindingProperty(UIElement.IsVisibleProperty, ".movie_watched", x => x.MovieStatus, {
+                    mode: DomBehind.Data.BindingMode.TwoWay,
+                    convertTarget: x => {
+                        if (!x) return false;
+                        return x === MovieStatus.Downloaded;
+                    }
+                })
                 .BindingProperty(UIElement.OpacityProperty, ".movie_downloadRequest", x => x.Status, {
                     convertTarget: (x: DownloadStatus) => x === DownloadStatus.None ? 1 : 0,
                     mode: DomBehind.Data.BindingMode.TwoWay,
@@ -33,7 +39,8 @@
                     },
                     mode: DomBehind.Data.BindingMode.TwoWay,
                 })
-                .BindingColumnAction(".movie_downloadRequest", (x, args) => x.Download(args))
+                .BindingColumnAction(".movie_videoDownloadRequest", (x, args) => x.Download(args, false))
+                .BindingColumnAction(".movie_soundDownloadRequest", (x, args) => x.Download(args, true))
 
                 .BindingProperty(UIElement.TextProperty, ".movie_infomation", x => x.NotifyInfomation, {
                     mode: DomBehind.Data.BindingMode.TwoWay

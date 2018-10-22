@@ -64,8 +64,13 @@ namespace GrandMonsieur.Core
             this.MaxResults = 40;
         }
 
-        public abstract string Generate();
+        public abstract string BuildUri();
 
-        public abstract Response Parse(dynamic json);
+        public virtual dynamic GetDynamicData(string uri)
+        {
+            return Utils.JsonRead(uri);
+        }
+
+        public abstract Response ParseDynamicData(dynamic json);
     }
 }

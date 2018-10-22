@@ -18,7 +18,15 @@
                 <div class="col-sm-4">
                     <div class="thumbnail" style="min-width:240px; min-height:135px">
                         <div class="image view view-first" style="height:100%; width:100%">
-                            <img class="movie_thumbnail" style="width: 100%; display: block; height:100%" src="" />
+
+                            <div class="box" style="padding:0; height:180px;overflow:hidden;border:none;background-color:transparent;">
+                                <div class="ribbon movie_watched" style="display:none">
+                                    <span class="movie_status">Download</span>
+                                </div>
+                                <img class="movie_thumbnail" style="width: 100%;height:180px; display: block;" src="" />
+                                @*<img class="movie_thumbnail" style="width: 100%; display: block; height:100%" src="" />*@
+                            </div>
+
                             <div class="mask parent-size" ontouchstart="">
                                 <div class="tools">
                                     <a class="movie_play"><i class="fa fa-play"></i> play</a>
@@ -29,28 +37,31 @@
                     </div>
                 </div>
                 <div class="col-sm-8 zero-margin">
-                    <div class="row">
+                    <div class="row" style="margin-left: 0;">
                         <h4 class="movie_title"></h4>
                     </div>
-                    <div class="row">
+                    <div class="row" style="margin-left: 0;">
                         <label class="movie_owner"></label>
                     </div>
-                    <div class="row">
+                    <div class="row" style="margin-left: 0;">
                         <span class="pull-right movie_views"></span>
                         <span class="pull-left  movie_publish"></span>
                     </div>
-                    <div class="row">
-                        <a class="movie_downloadRequest">
-                            <p class="fa fa-download" style="margin-top:10px; margin-left:1px;"> download now</p>
+                    <div class="row" style="margin-left: 0;">
+                        <a class="movie_videoDownloadRequest">
+                            <p class="fa fa-file-video-o" style="margin-top:10px; margin-left:1px;"> video </p>
+                        </a>
+                        <a class="movie_soundDownloadRequest">
+                            <p class="fa fa-music" style="margin-top:10px; margin-left:1px;"> sound only </p>
                         </a>
                     </div>
-                    <div class="row">
+                    <div class="row" style="margin-left: 0;">
                         <label class="movie_infomation"></label>
                     </div>
-                    <div class="row">
+                    <div class="row" style="margin-left: 0;">
                         <div class="progress movie_progress"></div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="margin-left: 0;">
                         <a class="movie_downloadLink" target="_blank" download></a>
                     </div>
                 </div>

@@ -3,7 +3,13 @@
 
         public History: DomBehind.Data.ListCollectionView;
         Initialize(): void {
+            AppMediator.SearchEvent.AddHandler((sender, e) => this.OnSearch(e));
+        }
+        private OnSearch(e: { search: string; site: SupportSites; }) {
+            if (!this.IsVisible) return;
 
+            this.History.Filter = (x: MovieInfo) => x.Title.toLowerCase().Contains(e.search.toLowerCase());
+            this.History.Refresh();
         }
         public Activate() {
             NProgress.start();
@@ -11,7 +17,7 @@
             let history = this.GetTable(MovieInfo);
             history.List().done(x => {
                 if (x instanceof Array) {
-                    let ordered = x.OrderByDecording(x => x.LastPlayDate);
+                    let ordered = x.OrderByDecording(x => x.LastUpdateDate);
                     this.History = new DomBehind.Data.ListCollectionView(ordered);
                 }
             }).always(() => {

@@ -23,7 +23,7 @@ namespace GrandMonsieur.Controllers
     {
         public ActionResult Index()
         {
-            bool isSecureConnection = String.Equals(Request.ServerVariables["HTTP_X_FORWARDED_PROTO"], "https", StringComparison.OrdinalIgnoreCase);
+            // bool isSecureConnection = String.Equals(Request.ServerVariables["HTTP_X_FORWARDED_PROTO"], "https", StringComparison.OrdinalIgnoreCase);
             var rootUri = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
             ViewBag.RootUri = rootUri;
             return View();

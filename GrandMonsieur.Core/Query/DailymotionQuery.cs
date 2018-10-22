@@ -15,7 +15,7 @@ namespace GrandMonsieur.Core
         }
         public static readonly string SearchUri = Utils.AppSettings<string>("SearchUri.Dailymotion", "https://api.dailymotion.com/videos?");
         public static readonly string IFrameUri = Utils.AppSettings<string>("IFrameURi.Dailymotion", "https://www.dailymotion.com/embed/video/{0}");
-        public override string Generate()
+        public override string BuildUri()
         {
             var list = new List<string>();
             list.Add("fields=duration_formatted,id,owner.screenname,thumbnail_url,title,url,embed_url,views_total");
@@ -53,7 +53,7 @@ namespace GrandMonsieur.Core
             return DailymotionQuery.SearchUri + string.Join("&", list);
         }
 
-        public override Response Parse(dynamic json)
+        public override Response ParseDynamicData(dynamic json)
         {
             var response = new Response();
 

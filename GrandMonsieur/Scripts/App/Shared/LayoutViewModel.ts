@@ -26,10 +26,8 @@
         }
 
         public SearchString: string;
-        public Search() {
+        public Search(identity: string) {
             this.UpdateSource();
-
-            if (String.IsNullOrWhiteSpace(this.SearchString)) return;
 
             let history = this.GetTable(SearchHistory);
             let pms = history.FindRowAsync(x => x.Filter, this.SearchString);
@@ -51,7 +49,7 @@
             }).always(() => {
                 AppMediator.SearchEvent.Raise(this, {
                     search: this.SearchString,
-                    site: SupportSites.Youtube | SupportSites.NicoNico | SupportSites.Dailymotion
+                    site: SupportSites.All
                 });
             });
         }

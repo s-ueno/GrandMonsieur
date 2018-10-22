@@ -66,6 +66,16 @@
                 .Binding(UIElement.IsVisibleProperty, x => x.AllowSearchNiconico);
 
 
+            let bilibiliBinding =
+                builder.Element(".bilibili_container")
+                    .BuildTemplateItems<MovieInfo>(x => x.BilibiliList, {
+                        template: "#movieTemplate",
+                    });
+            this.BindingMovie(bilibiliBinding);
+            builder.Element(".bilibili")
+                .Binding(UIElement.IsVisibleProperty, x => x.AllowSearchBilibili);
+
+
             builder.Element(".top")
                 .BindingAction(UIElement.Click, x => {
                     $('html,body').animate({ scrollTop: 0 }, 500, 'swing');
@@ -79,7 +89,20 @@
                 .BindingProperty(UIElement.TextProperty, ".movie_owner", x => x.Owner)
                 .BindingProperty(UIElement.TextProperty, ".movie_views", x => x.Views)
                 .BindingProperty(UIElement.TextProperty, ".movie_publish", x => x.UpdateDate, { convertTarget: x => this.DateDiff(x) })
-                .BindingProperty(UIElement.IsVisibleProperty, ".movie_watched", x => x.IsWatched, { mode: DomBehind.Data.BindingMode.TwoWay })
+                .BindingProperty(UIElement.IsVisibleProperty, ".movie_watched", x => x.MovieStatus, {
+                    mode: DomBehind.Data.BindingMode.TwoWay,
+                    convertTarget: x => {
+                        if (!x) return false;
+                        return x !== MovieStatus.None;
+                    }
+                })
+                .BindingProperty(UIElement.TextProperty, ".movie_status", x => x.MovieStatus, {
+                    mode: DomBehind.Data.BindingMode.TwoWay,
+                    convertTarget: x => {
+                        if (!x) return "";
+                        return x === MovieStatus.Watched ? "Watched" : "Download";
+                    }
+                })
                 .BindingColumnAction(".movie_play", (x, args) => x.Play(args))
                 .BindingColumnAction(".movie_download", (x, args) => x.Download(args));
         }
