@@ -21,7 +21,7 @@ namespace GrandMonsieur
 
         public static readonly string[] Css = new string[] {
              /* "~/Content/themes/base/all.css", */
-             "~/Content/themes/base/base.css",
+             //"~/Content/themes/base/base.css",
              "~/Content/themes/base/theme.css",
              "~/Content/themes/base/jquery-ui.css",
 

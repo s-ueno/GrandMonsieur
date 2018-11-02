@@ -26,3 +26,15 @@ function DownloadRequest(uri: string, title: string, soundOnly: boolean): JQuery
         .fail(e => d.reject(e));
     return d.promise();
 }
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js', { scope: "/" })
+        .then(function (registration) {
+            console.log('Service worker registration succeeded:', registration);
+        },
+        /*catch*/ function (error) {
+            console.log('Service worker registration failed:', error);
+        });
+} else {
+    console.log('Service workers are not supported.');
+}
