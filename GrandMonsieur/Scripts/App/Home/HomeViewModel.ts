@@ -14,6 +14,13 @@
             return $.GetLocalStorage("bilibili", true);
         }
 
+        public get LastResponseFromYoutube(): any {
+            return $.GetLocalStorage("LastResponseFromYoutube", {});
+        }
+        public set LastResponseFromYoutube(value: any) {
+            $.SetLocalStorage("LastResponseFromYoutube", value);
+        }
+
 
         public get Sort(): string {
             let value = $.GetLocalStorage("Sort", "Relevance");
@@ -145,8 +152,14 @@
             return $.when(
                 this.ExecuteAjax(site & SupportSites.Youtube, search, pageToken).done(x => {
                     this.YoutubeList = this.CreateListCollectionView(x.Response);
+                    this.LastResponseFromYoutube = x.Response;
                     this.UpdateTarget();
                     this.NextYoutubeListAction = () => this.SearchRaw(search, SupportSites.Youtube, x.Response.PageToken);
+                }).fail(error => {
+                    if (this.LastResponseFromYoutube) {
+                        this.YoutubeList = this.CreateListCollectionView(this.LastResponseFromYoutube);
+                        this.UpdateTarget();
+                    }
                 }),
                 this.ExecuteAjax(site & SupportSites.Dailymotion, search, pageToken).done(x => {
                     this.DailymotionList = this.CreateListCollectionView(x.Response);
