@@ -21,8 +21,31 @@ window.onload = function (e) {
 }
 function DownloadRequest(uri: string, title: string, soundOnly: boolean): JQueryPromise<any> {
     let d = $.Deferred();
-    __proxy.invoke("RequestDownload", uri, title, soundOnly)
-        .done(e => d.resolve(e))
-        .fail(e => d.reject(e));
+
+    if (__proxy.state !== SignalR.ConnectionState.Connected) {
+        __con.start().done(x => {
+            __proxy.invoke("RequestDownload", uri, title, soundOnly)
+                .done(e => d.resolve(e))
+                .fail(e => d.reject(e));
+        }).fail(x => this.console.error(x));
+    } else {
+        __proxy.invoke("RequestDownload", uri, title, soundOnly)
+            .done(e => d.resolve(e))
+            .fail(e => d.reject(e));
+    }
     return d.promise();
+}
+
+
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js', { scope: "/" })
+        .then(function (registration) {
+            console.log('Service worker registration succeeded:', registration);
+        },
+        /*catch*/ function (error) {
+                console.log('Service worker registration failed:', error);
+            });
+} else {
+    console.log('Service workers are not supported.');
 }

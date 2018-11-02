@@ -4,13 +4,17 @@ var CURRENT_CACHES = {
 };
 
 var precacheFiles = [
-    "/bundles/css",
-    "/bundles/nuget-js",
-    "/bundles/app-js",
-    "/favicon.ico",
+    //"/bundles/css",
+    //"/bundles/nuget-js",
+    //"/bundles/app-js",
+    "/favicon.png",
+
+    "/Content/images/bilibili.png",
+    "/Content/images/dailymotion.png",
+    "/Content/images/grandmonsieur.png",
+    "/Content/images/niconico.png",
     "/Content/images/preloader.gif",
-    "/Content/signin/Signin.jpg",
-    "/"
+    "/Content/images/yt_icon_rgb.png"
 ];
 
 self.addEventListener('install', function (evt) {
