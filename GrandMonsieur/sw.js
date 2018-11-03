@@ -1,12 +1,12 @@
-﻿var CACHE_VERSION = 4;
+﻿var CACHE_VERSION = "10";
 var CURRENT_CACHES = {
     prefetch: 'prefetch-cache-v' + CACHE_VERSION
 };
 
 var precacheFiles = [
-    //"/bundles/css",
-    //"/bundles/nuget-js",
-    //"/bundles/app-js",
+    "/bundles/css",
+    "/bundles/nuget-js",
+    "/bundles/app-js",
     "/favicon.png",
 
     "/Content/images/bilibili.png",

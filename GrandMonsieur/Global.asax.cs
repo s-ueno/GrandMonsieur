@@ -12,7 +12,7 @@ namespace GrandMonsieur
 
             BundleTable.Bundles.Clear();
 #if DEBUG
-            BundleTable.EnableOptimizations = false;
+            BundleTable.EnableOptimizations = true;
 #else
             BundleTable.EnableOptimizations = true;
 #endif

@@ -21,18 +21,21 @@ window.onload = function (e) {
 }
 function DownloadRequest(uri: string, title: string, soundOnly: boolean): JQueryPromise<any> {
     let d = $.Deferred();
-
-    if (__proxy.state !== SignalR.ConnectionState.Connected) {
-        __con.start().done(x => {
-            __proxy.invoke("RequestDownload", uri, title, soundOnly)
-                .done(e => d.resolve(e))
-                .fail(e => d.reject(e));
-        }).fail(x => this.console.error(x));
-    } else {
-        __proxy.invoke("RequestDownload", uri, title, soundOnly)
-            .done(e => d.resolve(e))
-            .fail(e => d.reject(e));
-    }
+    __proxy.invoke("RequestDownload", uri, title, soundOnly)
+        .done(e => d.resolve(e))
+        .fail(e => d.reject(e));
+    //if (__proxy.state !== SignalR.ConnectionState.Connected) {
+        
+    //    __con.start().done(x => {
+    //        __proxy.invoke("RequestDownload", uri, title, soundOnly)
+    //            .done(e => d.resolve(e))
+    //            .fail(e => d.reject(e));
+    //    }).fail(x => this.console.error(x));
+    //} else {
+    //    __proxy.invoke("RequestDownload", uri, title, soundOnly)
+    //        .done(e => d.resolve(e))
+    //        .fail(e => d.reject(e));
+    //}
     return d.promise();
 }
 
