@@ -24,8 +24,9 @@ function DownloadRequest(uri: string, title: string, soundOnly: boolean): JQuery
     __proxy.invoke("RequestDownload", uri, title, soundOnly)
         .done(e => d.resolve(e))
         .fail(e => d.reject(e));
+
     //if (__proxy.state !== SignalR.ConnectionState.Connected) {
-        
+
     //    __con.start().done(x => {
     //        __proxy.invoke("RequestDownload", uri, title, soundOnly)
     //            .done(e => d.resolve(e))

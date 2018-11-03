@@ -17,6 +17,12 @@ var precacheFiles = [
     "/Content/images/yt_icon_rgb.png"
 ];
 
+var ignoreRequests = new RegExp('(' +
+    [
+        '/signalr'
+    ].join('(\/?)|\\') + ')$');
+
+
 self.addEventListener('install', function (evt) {
     console.log('The service worker is being installed.');
     evt.waitUntil(precache().then(function () {
@@ -33,6 +39,12 @@ self.addEventListener('activate', function (event) {
 self.addEventListener('fetch', function (evt) {
     var req = evt.request.clone();
     if (req.method === "GET") {
+
+        if (ignoreRequests.test(event.request.url)) {
+            console.log('ignored: ', event.request.url);
+            return;
+        }
+
         console.log('The service worker is serving the asset.' + evt.request.url);
 
         evt.respondWith(fromCache(evt.request).catch(fromServer(evt.request)));
